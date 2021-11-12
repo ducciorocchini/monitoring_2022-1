@@ -1,3 +1,4 @@
+# ------------- day 1 October 29th
 # R code for ecosystem monitoring by remote sensing
 # First of all we need to install additional packages
 # raster package to manage image data
@@ -29,7 +30,7 @@ plot(l2011, col=cl)
 plotRGB(l2011, r=3, g=2, b=1, stretch="Lin")
 
 
-#--------------- day2
+#--------------- day2 November 5th
 
 # B1 is the reflectance in the blue band
 # B2 is the reflectance in the green band
@@ -70,7 +71,7 @@ plot(l2011$B2_sre, col=clg)
 
 
 
-#------------- day 3
+#------------- day 3 november 8th
 
 #let's plot only the blue bend
 plot(l2011$B1_sre)
@@ -143,3 +144,35 @@ plotRGB(l2011, r=3, g=2, b=4, stretch="Lin")
 #in monitoring the first step is observe the current situation. then multitemporal analysis. see how it was back in time to see changes
 
 #in lab there is a file p224r63_1988.rdg and we will use it to make comparison in time
+
+# -------------- day 4 12 November
+# final day on this tropical forest reserve
+# first of all set working directory and recall raster package
+
+library(raster)
+setwd("C:/lab/")
+l2011 <- brick("p224r63_2011.grd")
+# let's plot it in RGB channels
+plotRGB(l2011, r=4, g=3, b=2, stretch= "Lin")
+#let's make use of a different stretch: histogram stretching. it enhance a lot differences from one place to another
+plotRGB(l2011, r=4, g=3, b=2, stretch= "Hist")
+#differences from one place to another are enhanced
+# we can see a large part of the forest destroied by agriculture. let's see the differences with the forest in 1988
+#importing past data
+l1988 <- brick("p224r63_1988.grd")
+l1988 # bends are the same to the previous file
+
+#let's plot both files (2011 and 1988) to make comparisons.
+par(mfrow=c(2, 1))
+plotRGB(l1988, r=4, g=3, b=2, stretch= "Lin")
+plotRGB(l2011, r=4, g=3, b=2, stretch= "Lin")
+#in 1988 the forest was there. then they started builting some small agricultural areas and then in 2011 there is a completely opening of several part of the forest to agriculture
+# put the NIR in the blue channel to enhance agricultural areas (that will appear in yellow)
+par(mfrow=c(2, 1))
+plotRGB(l1988, r=2, g=3, b=4, stretch= "Lin")
+plotRGB(l2011, r=2, g=3, b=4, stretch= "Lin")
+
+
+
+
+
