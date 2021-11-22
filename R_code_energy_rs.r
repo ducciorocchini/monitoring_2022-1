@@ -22,4 +22,8 @@ plotRGB(l1992, r=1, g=2, b=3, stretch="Lin")
 # why water is white in the image? if it was pure water it will become black. 
 # but this is white becasue is a reflection of smth that is not water
 
-# defor1_.2 = 
+# defor1_.2 = nir
+
+
+#### nov 22 ###
+
