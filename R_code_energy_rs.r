@@ -1,11 +1,12 @@
 ### 19 novembre ###
 # R code for estimating energy in ecosystems
+# How many energy is avaible from primary prodcuers (plants) to others organisms
 
 
 library(raster)
 setwd("C:/lab")
 
-# Importing the data
+# Importing the data (on virtuale, defor 1 and 2, download from virtuale and save it in lab folder)
 l1992 <- brick("defor1_.jpg") # Image of 1992
 # It gives error becasue additional libraries are needed. so we will install rgdal
 install.packages("rgdal")
@@ -45,13 +46,17 @@ plotRGB(l1992, r=1, g=2, b=3, stretch="Lin")
 #now let's check the situation in 2006
 l2006 <- brick("defor2_.jpg")
 l2006
-
+# plotting the imported image
 plotRGB(l2006, r=1, b=2, g=3, stretch="Lin")
 
+# defor1_.1 = NIR
+# defor1_.2 = red
+# defor1_.3 = green
 #lot of considerations we can make: rio peixoto, the amount of solid inside the river is smaller 
 # (is blue, not white; water might become balck if is pure water, if there is soil in water it will became more and more white)
 #let's plot together the images
 
+# par
 par(mfrow=c(2,1))
 plotRGB(l1992, r=1, g=2, b=3, stretch="Lin")
 plotRGB(l2006, r=1, b=2, g=3, stretch="Lin")
@@ -68,16 +73,12 @@ plotRGB(l2006, r=1, b=2, g=3, stretch="Lin")
 # defor1_.1 is the bend of nir reflectance and defor1_.2 of the red
 dev.off()
 dvi1992 <- l1992$defor1_.1 - l1992$defor1_.2
-[10:14 AM] Duccio Rocchini
-# let's calculate energy in 1992
-
-dev.off()
-dvi1992 <- l1992$defor1_.1 - l1992$defor1_.2
 cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
 plot(dvi1992, col=cl)
 
+# calculate energy in 2006
 dvi2006 <- l2006$defor2_.1 - l2006$defor2_.2
-cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifyng a color scheme
 plot(dvi2006, col=cl)
 #all the yellow part are energy completely loss
 #in addittion we're losing structure for animals
@@ -86,6 +87,7 @@ plot(dvi2006, col=cl)
 # if we make the difference between dvi 1992 and 2006, high values as result are stating there have been a big change
 
 dvidif <- dvi1992 - dvi2006
+# plot the result
 cld <- colorRampPalette(c('blue','white','red'))(100)
 plot(dvidif, col=cld)
 #everything which is red means a high value of difference so are the areas in which energy has been completely lost
