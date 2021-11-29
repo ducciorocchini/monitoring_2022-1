@@ -105,4 +105,64 @@ plotRGB(EN, r=1, g=7, b=13, stretch="Lin")
 #everything that become red will have high value of NO2 in the first image. everithing is green hihg value of NO2 in 7th image ecc
 
 
+### day 2: 29 nov ###
+# we will import all data togheter in one shot
+# lapply function: apply a function over a list, in our case raster
+# first we should make the list with list.files function
+# list.files(path="", pattern=""). 
+# path argument can be avoided by setting the working directory. 
+# the pattern is something that all the images have in common, like EN in the name for instance
+
+library(raster)
+setwd("C:/lab/EN")
+
+rlist <- list.files(pattern="EN")
+rlist
+# we generated the list, now we can apply the lapply function to apply the raster function to rlist
+# the function raster is importing every single file of the list
+# lapply(X, FUN)
+# X is the list of files
+# FUN is the function u want to apply to the list
+
+list_rast <- lapply(rlist, raster)
+list_rast
+
+# now let's use stack function to build the stack of all our data imported
+EN_stack <- stack(list_rast)
+EN_stack
+
+# we can now use the stack to plot the images all together
+cl <- colorRampPalette(c("red", "orange", "yellow"))(100)
+plot(EN_stack, col=cl)
+
+# exercise: plot only the first image of the stack
+cl <- colorRampPalette(c("red", "orange", "yellow"))(100)
+plot(EN_stack$EN_0001, col=cl)
+# to know the name of the first image go see the output of EN_stack
+
+
+# difference
+ENdif <- EN_stack$EN_0001 - EN_stack$EN_0013
+cldif <- colorRampPalette(c("blue", "white", "red"))(100)
+# in red the highest variability between the two images
+
+
+# automated processing Source function
+# source: read r code from a file, a connection or expressions
+# create a script with the previous code and save it in EN folder as "R_code_automatic_script.txt"
+# source(file)
+source("R_code_automatic_script.txt")
+
+# today we learnt how to do automatic things like import data all together and a script with a code without copy paste it
+
+
+
+
+
+
+
+
+
+
+
 
