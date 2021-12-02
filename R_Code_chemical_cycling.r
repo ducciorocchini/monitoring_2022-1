@@ -21,13 +21,14 @@ en01 <- raster("EN_0001.png")
 # What is the range of the data? so the minimum and the maximum value of [NO2]
 # we can put in R the name of the file "en01" and it will give us all the informations
 # the range is from 0 to 255, is called 8-bit file. this concept in remote sensing is called radiometric resolution
+# 8 bit --> 2^8=256 informations
 
 # Now we can plot this image. let's set the colorRampPalette
 cl <- colorRampPalette(c('red','orange','yellow'))(100)
 # We've selected the yellow for the maximum value of pollution possible.
 # This becasue yellow component is catching our eyes more than the other wavelengths. if you want to focus the attention of your eye in a certain point of the map, use yellow is the best solution.
 
-# Now let's plot the NO2 values of january 2020 by the cl plaette
+# Now let's plot the NO2 values of january 2020 by the cl palette
 plot(en01, col=cl)
 # with the palette we've used, the red areas are the ones in which we have the smallest pollution while the yellow ones the highest.
 # basically the higher is the amount og human beings in a certain city, the higher is the amount of NO2 expected spreading all around europe
@@ -104,51 +105,58 @@ plotRGB(EN, r=1, g=7, b=13, stretch="Lin")
 
 ######## day 2: 29 nov ########
 # we will import all data togheter in one shot
-# lapply function: apply a function over a list, in our case raster
+# lapply function: it allows to apply a function over a list, in our case the raster function
 # first we should make the list with list.files function
 # list.files(path="", pattern=""). 
 # path argument can be avoided by setting the working directory. 
 # the pattern is something that all the images have in common, like EN in the name for instance
 
-library(raster)
+# First of all let's set the wd and recall the package we will use
 setwd("C:/lab/EN")
+library(raster)
 
+# Now let's create the list of our "EN" images, and let's call the list "rlist"
 rlist <- list.files(pattern="EN")
-rlist
+rlist # the output is the list of images' names
 # we generated the list, now we can apply the lapply function to apply the raster function to rlist
-# the function raster is importing every single file of the list
-# lapply(X, FUN)
-# X is the list of files
-# FUN is the function u want to apply to the list
-
+# the function raster() is importing every single file of the list
+# lapply(X, FUN), where X is the list of files and FUN is the function u want to apply to the list
+# we assign the name list_rast to the list of images imported
 list_rast <- lapply(rlist, raster)
-list_rast
+list_rast # the output is the list of every signle files, one after the other, which have been imported
 
-# now let's use stack function to build the stack of all our data imported
+
+# we do not want every single file separated, but we want them all together so now let's use stack function to build the stack of all our data imported, and let's call it ENstack
 EN_stack <- stack(list_rast)
-EN_stack
+EN_stack #the output are the information of all the images all together
 
 # we can now use the stack to plot the images all together
 cl <- colorRampPalette(c("red", "orange", "yellow"))(100)
 plot(EN_stack, col=cl)
+# We have plotted all our 13 images in one shot
 
 # exercise: plot only the first image of the stack
 cl <- colorRampPalette(c("red", "orange", "yellow"))(100)
 plot(EN_stack$EN_0001, col=cl)
-# to know the name of the first image go see the output of EN_stack
+# to know the name of the first image go see the output of EN_stack, in the "names" row
 
 
-# difference
+# difference: let's make the difference between the first and the 13th image
+# if in the result image we have high values for each pixel it means the difference is high
 ENdif <- EN_stack$EN_0001 - EN_stack$EN_0013
+# let's plot ENdif
 cldif <- colorRampPalette(c("blue", "white", "red"))(100)
-# in red the highest variability between the two images
+plot(ENdif, col=cldif)
+# thanks to the palette we've used the red parts are the ones with the highest variability between the two images, that means an higher decrease in [NO2] from january to march
 
 
 # automated processing Source function
-# source: read r code from a file, a connection or expressions
+# source() function: read r code from a file, a connection or expressions
 # create a script with the previous code and save it in EN folder as "R_code_automatic_script.txt"
-# source(file)
+# then apply the source(file) function, with file= name of the script you have created
 source("R_code_automatic_script.txt")
+# in the script i've written the code for the EN diff plot so if i run 'source("R_code_automatic_script.txt")' i directly obtain the plot
+
 
 # today we learnt how to do automatic things like import data all together and a script with a code without copy paste it
 
