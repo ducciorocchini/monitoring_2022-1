@@ -96,7 +96,7 @@ plotRGB(EN, r=1, g=7, b=13, stretch="Lin")
 # red component: beginning of lockdown so, 1st image. everything that become red will have high value of NO2 in the first image, so in january
 # green component: middle of lockdown, 7th image. everything is green means that has hihg value of NO2 in 7th image
 # blue components: end of the lockdown: 13th image.  blue part is where there are high values in the 13 image, so in the end of march
-# we can state now that the pianura padanar region had high values also during the lockdown, because of the agricultural activites.
+# we can state now that the pianura padanar region had high values also during the lockdown, because of the agricultural activites. in fact the area is white (sum of the other colors) becasue the [NO2] were high all the time
 
 # today we had a time series of several images and we built them all together in a stack to make an analisis
 
