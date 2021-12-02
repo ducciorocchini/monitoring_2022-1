@@ -1,22 +1,39 @@
+# 26 november
 # R code for chemical cycling study
-# Let's do time series of NO2 change in Europe during the lockdown
-# First let's import the data. 
+# We will deal with a time series of [NO2] changes in Europe during the lockdown, the period in which humans have not existed for the ecosystem
+# These data came from the Copernicous Sentinell, a satellite launched by the EU union together with the Copernicus programm;
+# The Copernicous sentinel has the capability to directly estimate the amounto of NO2 in the air
+# So let's see what this satellite has been able to catch. let's import the data. 
 
-# Set the working directory
-setwd("C:/lab/en/")  # windows
+# Set the working directory. NB: we've put EN images directly in the EN folder, inside the lab folder.
+# So in this case remember you have to set the right wd to arrive at EN
+setwd("C:/lab/EN/")  # windows
 
-#we need raster function based on the raster package so ler's recall the raster library
+#to import the data we need the raster function, included on the raster package so let's recall the raster library
 library(raster)
-#now let's use the function called raster and import the data
-en01 <- raster("EN_0001")
-# What is the range of the data
-#0 to 255, is called 8 bit file. this concept in remote sensing is called radiomating resolution
-# https://www.google.com/search?q=R+colours+names&tbm=isch&ved=2ahUKEwiF-77Z1bX0AhULtKQKHQ3WDWYQ2-cCegQIABAA&oq=R+colours+names&gs_lcp=CgNpbWcQAzIECAAQEzoHCCMQ7wMQJzoICAAQCBAeEBNQiQhYnwxgwg1oAHAAeACAAUqIAZYDkgEBNpgBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=vKKgYYWtOovokgWNrLewBg&bih=526&biw=1056#imgrc=OtMzJfyT_OwIiM
-cl <- colorRampPalette(c('red','orange','yellow'))(100)
-# let's plot
-plot(en01, col=cl)
+# to import data till now we used the brick function to import one file composed by several images.
+# but this time we're dealing with several files each one containing just 1 image, 1 layer. 
+# In fact EN data are a time series. is a set that is changing in time, one image after the other stating the changing on [NO2] in time.
+# So for import these data we will use the raster funciton.
+# raster() import each single layer one after the other. It allow to create a RasterLayer object.
+# Let's import the first data "EN_0001"
+en01 <- raster("EN_0001.png")
+# What is the range of the data? so the minimum and the maximum value of [NO2]
+# we can put in R the name of the file "en01" and it will give us all the informations
+# the range is from 0 to 255, is called 8-bit file. this concept in remote sensing is called radiometric resolution
 
-# exercise import the end of march NO2 and plot it 
+# Now we can plot this image. let's set the colorRampPalette
+cl <- colorRampPalette(c('red','orange','yellow'))(100)
+# We've selected the yellow for the maximum value of pollution possible.
+# This becasue yellow component is catching our eyes more than the other wavelengths. if you want to focus the attention of your eye in a certain point of the map, use yellow is the best solution.
+
+# Now let's plot the NO2 values of january 2020 by the cl plaette
+plot(en01, col=cl)
+# with the palette we've used, the red areas are the ones in which we have the smallest pollution while the yellow ones the highest.
+# basically the higher is the amount og human beings in a certain city, the higher is the amount of NO2 expected spreading all around europe
+# of course air will make the NO2 spread
+
+# Exercise: import the end of march NO2 and plot it 
 en13 <- raster("EN_0013.png")
 plot(en13, col=cl)
 
