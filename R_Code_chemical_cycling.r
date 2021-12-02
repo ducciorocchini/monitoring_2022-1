@@ -37,92 +37,72 @@ plot(en01, col=cl)
 en13 <- raster("EN_0013.png")
 plot(en13, col=cl)
 
-#build a multiframe
+#build a multiframe window with 2 rows and 1 column with the par function
+par(mfrow=c(2,1))
+plot(en01, col=cl)
+plot(en13, col=cl)
+# we can compare the amount of NO2 at the beginning and the end of the lockdown. there has been a visible reduction.
+
+#Now let's import all the images
+en01 <- raster("EN_0001.png")
+en02 <- raster("EN_0002.png")
+en03 <- raster("EN_0003.png")
+en04 <- raster("EN_0004.png")
+en05 <- raster("EN_0005.png")
+en06 <- raster("EN_0006.png")
+en07 <- raster("EN_0007.png")
+en08 <- raster("EN_0008.png")
+en09 <- raster("EN_0009.png")
+en10 <- raster("EN_0010.png")
+en11 <- raster("EN_0011.png")
+en12 <- raster("EN_0012.png")
+en13 <- raster("EN_0013.png")
 
 
-#Let's import all the images
-EN01 <- raster("EN_0001.png")
-EN02 <- raster("EN_0002.png")
-EN03 <- raster("EN_0003.png")
-EN04 <- raster("EN_0004.png")
-EN05 <- raster("EN_0005.png")
-EN06 <- raster("EN_0006.png")
-EN07 <- raster("EN_0007.png")
-EN08 <- raster("EN_0008.png")
-EN09 <- raster("EN_0009.png")
-EN10 <- raster("EN_0010.png")
-EN11 <- raster("EN_0011.png")
-EN12 <- raster("EN_0012.png")
-EN13 <- raster("EN_0013.png")
-
-# otherwise:
-# rlist <- list.files(pattern="EN")
-# rlist 
-# list_rast <- lapply(rlist, raster)
-# ENstack <- stack(list_rast)
-
-#plot all the data together
+# plot all the data together with the common par()
 par(mfrow=c(4,4))
-plot(EN01, col=cl)
-plot(EN02, col=cl)
-plot(EN03, col=cl)
-plot(EN04, col=cl)
-#Let's import all the images
-EN01 <- raster("EN_0001.png")
-EN02 <- raster("EN_0002.png")
-EN03 <- raster("EN_0003.png")
-EN04 <- raster("EN_0004.png")
-EN05 <- raster("EN_0005.png")
-EN06 <- raster("EN_0006.png")
-EN07 <- raster("EN_0007.png")
-EN08 <- raster("EN_0008.png")
-EN09 <- raster("EN_0009.png")
-EN10 <- raster("EN_0010.png")
-EN11 <- raster("EN_0011.png")
-EN12 <- raster("EN_0012.png")
-EN13 <- raster("EN_0013.png")
+plot(en01, col=cl)
+plot(en02, col=cl)
+plot(en03, col=cl)
+plot(en04, col=cl)
+plot(en05, col=cl)
+plot(en06, col=cl)
+plot(en07, col=cl)
+plot(en08, col=cl)
+plot(en09, col=cl)
+plot(en10, col=cl)
+plot(en11, col=cl)
+plot(en12, col=cl)
+plot(en13, col=cl)
+# we obtain a multiframe composed by 13 images, showing the changes in [NO2] during the lock down period
 
+# how to avoid all of this? how to plot all the images in one shot?
+# thanks to the stack function 
+# we have 13 files. before we have imported each of them one after the other with the raster function
+# now we can built a stack, that contains all the images. Let's assign to the stack the name ENstack
+EN <- stack(en01, en02, enN03, en04, en05, en06, en07, en08, en09, en10, en11, en12, en13)
 
-#plot all the data together
-par(mfrow=c(4,4))
-plot(EN01, col=cl)
-plot(EN02, col=cl)
-plot(EN03, col=cl)
-plot(EN04, col=cl)
-plot(EN05, col=cl)
-plot(EN06, col=cl)
-plot(EN07, col=cl)
-plot(EN08, col=cl)
-plot(EN09, col=cl)
-plot(EN10, col=cl)
-plot(EN11, col=cl)
-plot(EN12, col=cl)
-plot(EN13, col=cl)
+# now let's plot the stack, so all the images togheter
+plot(EN, col=cl)
 
+# NB: this is what satelite images are: stack of several images
 
-# how to avoid all of this?
-
-# stack function 
-ENstack <- stack(EN01, EN02, EN03, EN04, EN05, EN06, EN07, EN08, EN09, EN10, EN11, EN12, EN13)
-#we should assign a name to the stack
-# Plot the stack all togheter
-plot(ENstack, col=cl)
-
-# otherwise:
-# rlist <- list.files(pattern="EN")
-# rlist 
-# list_rast <- lapply(rlist, raster)
-# ENstack <- stack(list_rast)
-
-#plot only the first image from the stack
+# Exercise: plot only the first image from the stack
 plot(EN$EN_0001, col=cl)
+# you can see the original name of the images by typing the name of the stack in R console and then run it
 
 # let's plot an RGB space
 plotRGB(EN, r=1, g=7, b=13, stretch="Lin")
-#everything that become red will have high value of NO2 in the first image. everithing is green hihg value of NO2 in 7th image ecc
+# red component: beginning of lockdown so, 1st image. everything that become red will have high value of NO2 in the first image, so in january
+# green component: middle of lockdown, 7th image. everything is green means that has hihg value of NO2 in 7th image
+# blue components: end of the lockdown: 13th image.  blue part is where there are high values in the 13 image, so in the end of march
+# we can state now that the pianura padanar region had high values also during the lockdown, because of the agricultural activites.
+
+# today we had a time series of several images and we built them all together in a stack to make an analisis
 
 
-### day 2: 29 nov ###
+
+######## day 2: 29 nov ########
 # we will import all data togheter in one shot
 # lapply function: apply a function over a list, in our case raster
 # first we should make the list with list.files function
