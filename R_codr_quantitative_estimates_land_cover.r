@@ -73,6 +73,134 @@ ggplot(proportion1992, aes(x=cover, y=prop1992, color=cover)) + geom_bar(stat="i
 # today we've learnt how to pass from the qualitative sensation we have from our eyes by seing the images to a quantitative graph
 
 
+### 6th december ###
+# let's recall the libraries that we will need today
+library(raster)
+library(RStoolbox) # package used for the classification
+library(ggplot2)
+setwd("C:/lab/")
+
+# let's import images defor 1 and defor 2 using brick function applied to a list.
+# brick since each image is composed by 3 bends (NIR, red and green). otherwise for single layers we use the raster function
+rlist <- list.files(pattern="defor")
+rlist
+# lapply function to apply brick function over rlist
+list_rast <- lapply(rlist, brick)
+list_rast
+# lets assign simple names to the images and plot them in RGB space
+l1992 <- list_rast[[1]]
+plotRGB(l1992, r=1, g=2, b=3, stretch="Lin")
+
+l2006 <- list_rast[[2]]
+plotRGB(l2006, r=1, g=2, b=3, stretch="Lin")
+
+# we can classify our image by creating another image in which we can distinguish forest and agricultural areas
+# all forest pixels have high values of NIR reflectance and low values of red. so we can say to the forest that all pixels having this reflectance values can be grouped and called forest
+# the same for the agricultural areas, whose pixel has low values of NIR reflectance and high of red (also water)
+# the classification can be done with unsuperClass funciton, that does unsupervised classification, that is taking the pixels and see if ther are meaningfull groups.
+# unsuperClass(img, nSamples, nClasses)
+l1992c <- unsuperClass(l1992, nClasses=2)
+l1992c
+# let's plot the map
+plot(l1992c$map)
+# value 2= agricultural areas and water
+# value 1= forests
+
+# function freq() generate frequency tables so it will calculate the % of forest pixels and agricultural areas
+freq(l1992c$map)
+#     value  count
+# [1,]     1  35205
+# [2,]     2 306087
+# now we can calculate the proportion. we have the number of total pixel: 341292
+total1992 <- 341292
+# proportion of forests and agricultural areas pixel on this total amount
+propagri1992 <- 35205/total
+propforest1992 <- 306087/total
+propagri1992 #  0.1031521, so 10%
+propforest1992 # 0.8968479, so 90%
+
+# to plot we can build a dataframe and then plot
+# let's build the dataframe.
+cover <- c("Forest", "Agriculture")
+prop1992 <- c(0.8968479, 0.1031521)
+proportion1992 <- data.frame(cover, prop1992)
+
+ggplot(proportion1992, aes(x=cover, y=prop1992, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,1)
+
+
+# Let's do the same for defor2
+# lets classify forest and agricultural areas in 12006 with unsuperClass(x, nClasses).
+l2006c <- unsuperClass(l2006, nClasses=2) # with this function we can create 2 classes: forest and agricultural areas each one characterized by two different group of pixels sharing similar value of reflectance
+# it is an iterative process: time by time the software is going to assign each pixel to a class. so the final values can be a bit different
+l2006c
+
+plot(l2006c$map)
+# values 1= forest
+# values 2= agricultural areas
+
+# now let's calculate the frequencies of values
+freq(l2006c$map)
+#      value  count
+# [1,]     1 178373 # forest
+# [2,]     2 164353 # agriculture
+
+# total amount of pixel: 342726
+# forest (class 1) = 178373
+# agricultural areas and water = 164353
+# let's calculate the proportion
+
+total <- 342726
+propforest2006 <- 178373/total
+propforest2006 # 0.5204537 -> 52%
+propagri2006 <- 164353/total
+propagri2006 # 0.4795463 -> 48%
+
+# to plot we can build a dataframe and then plot
+# let's build the dataframe.
+cover <- c("Forest", "Agriculture")
+prop2006 <- c(0.5204537, 0.4795463)
+proportion2006 <- data.frame(cover, prop2006)
+# let's build the graph
+ggplot(proportion2006, aes(x=cover, y=prop2006, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,1)
+
+
+# let's make comparisons
+cover <- c("Forest", "Agriculture")
+prop1992 <- c(0.8968479, 0.1031521)
+prop2006 <- c(0.5204537, 0.4795463)
+proportion <- data.frame(cover, prop1992, prop2006)
+proportion
+
+library(gridExtra) # we will use this library for multiframe ggplot
+# let's use grid.arrange function: that will put several graph in the same multiframe
+# first let's assign every ggplot to an object
+p1 <- ggplot(proportion1992, aes(x=cover, y=prop1992, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,1)
+p2 <- ggplot(proportion2006, aes(x=cover, y=prop2006, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,1)
+
+grid.arrange(p1, p2, nrows=1)
+
+
+# forest passed from 90% of the landscape to 50% of the landscape
+# agriculture passed from 10 % to 50% of the landscape
+# the aspectances are that afgriculture will continue increase and forests decrease
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
