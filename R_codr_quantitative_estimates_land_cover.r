@@ -179,12 +179,52 @@ p2 <- ggplot(proportion2006, aes(x=cover, y=prop2006, color=cover)) + geom_bar(s
 
 grid.arrange(p1, p2, nrows=1)
 
+### 13 dec ###
+# it doesn't work. solutions:
+grid.arrange(p1, p2, nrow=1)
+# or:
+# use the package patchwork
+install.packages("patchwork")
+library(patchwork)
+p1+p2
+# if you run p1/p2 you will have the 2 graphs one on top of the other
+
+# patchwork is working even with raster data but they should be plotted with
+# instead of using plotRGB we are going to use ggRGB
+plotRGB(l1992, r=1, g=2, b=3, stretch="Lin")
+# let's do the same but with ggRGB
+ggRGB(l1992, r=1, g=2, b=3)
+# here you have also the coordinates
+
+# Let's play with the stretch
+ggRGB(l1992, r=1, g=2, b=3, stretch="lin")
+ggRGB(l1992, r=1, g=2, b=3, stretch="hist")
+# with this last stretch we can se some horizontal lines. this becasue the imange is taken by a scanner
+ggRGB(l1992, r=1, g=2, b=3, stretch="sqrt")
+# with this stretch in general you are compacting the data
+ggRGB(l1992, r=1, g=2, b=3, stretch="log")
+# remember that log in R is not the log in base ten but is the natural log
+
+# let's see all these graphs all together
+gp1 <- ggRGB(l1992, r=1, g=2, b=3, stretch="lin")
+gp2 <- ggRGB(l1992, r=1, g=2, b=3, stretch="hist")
+gp3 <- ggRGB(l1992, r=1, g=2, b=3, stretch="sqrt")
+gp4 <- ggRGB(l1992, r=1, g=2, b=3, stretch="log")
+
+gp1 + gp2 + gp3 + gp4
+
+# multitemporal patchwork
+gp1 <- ggRGB(l1992, r=1, g=2, b=3)
+gp5 <- ggRGB(l2006, r=1, g=2, b=3)
+
+gp1 + gp5
+gp1/gp5
 
 # forest passed from 90% of the landscape to 50% of the landscape
 # agriculture passed from 10 % to 50% of the landscape
 # the aspectances are that afgriculture will continue increase and forests decrease
 
-
+# we've learnt how to build multiframe in different manners: parmfrow, stack, gridarrange, patchwork
 
 
 
