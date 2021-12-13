@@ -74,17 +74,18 @@ ggplot(proportion1992, aes(x=cover, y=prop1992, color=cover)) + geom_bar(stat="i
 
 
 ### 6th december ###
-# let's recall the libraries that we will need today
+# let's recall the libraries that we will need today and set the wd
 library(raster)
 library(RStoolbox) # package used for the classification
 library(ggplot2)
 setwd("C:/lab/")
 
 # let's import images defor 1 and defor 2 using brick function applied to a list.
-# brick since each image is composed by 3 bends (NIR, red and green). otherwise for single layers we use the raster function
+# we use the brick function since each image is composed by 3 bends (NIR, red and green). otherwise for single layer we use the raster function (like EN images)
+# First let's create the list
 rlist <- list.files(pattern="defor")
 rlist
-# lapply function to apply brick function over rlist
+# now use lapply function to apply brick function over rlist
 list_rast <- lapply(rlist, brick)
 list_rast
 # lets assign simple names to the images and plot them in RGB space
@@ -95,7 +96,7 @@ l2006 <- list_rast[[2]]
 plotRGB(l2006, r=1, g=2, b=3, stretch="Lin")
 
 # we can classify our image by creating another image in which we can distinguish forest and agricultural areas
-# all forest pixels have high values of NIR reflectance and low values of red. so we can say to the forest that all pixels having this reflectance values can be grouped and called forest
+# all forest pixels have high values of NIR reflectance and low values of red. so we can say to R that all pixels having this reflectance values can be grouped and called forest
 # the same for the agricultural areas, whose pixel has low values of NIR reflectance and high of red (also water)
 # the classification can be done with unsuperClass funciton, that does unsupervised classification, that is taking the pixels and see if ther are meaningfull groups.
 # unsuperClass(img, nSamples, nClasses)
@@ -103,9 +104,11 @@ l1992c <- unsuperClass(l1992, nClasses=2)
 l1992c
 # let's plot the map
 plot(l1992c$map)
+# from the image we obtained and the legend we can observe that:
 # value 2= agricultural areas and water
 # value 1= forests
 
+# but how to obtain a concrete estimation of agricultural/water areas and forest one?
 # function freq() generate frequency tables so it will calculate the % of forest pixels and agricultural areas
 freq(l1992c$map)
 #     value  count
@@ -113,7 +116,7 @@ freq(l1992c$map)
 # [2,]     2 306087
 # now we can calculate the proportion. we have the number of total pixel: 341292
 total1992 <- 341292
-# proportion of forests and agricultural areas pixel on this total amount
+# proportion of forests and agricultural areas' pixel on this total amount
 propagri1992 <- 35205/total
 propforest1992 <- 306087/total
 propagri1992 #  0.1031521, so 10%
@@ -171,22 +174,23 @@ prop2006 <- c(0.5204537, 0.4795463)
 proportion <- data.frame(cover, prop1992, prop2006)
 proportion
 
-library(gridExtra) # we will use this library for multiframe ggplot
-# let's use grid.arrange function: that will put several graph in the same multiframe
+library(gridExtra) # we will a function in this package to buld a multiframe of ggplots
+# let's use grid.arrange function: it will put several graphs in the same multiframe
 # first let's assign every ggplot to an object
 p1 <- ggplot(proportion1992, aes(x=cover, y=prop1992, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,1)
 p2 <- ggplot(proportion2006, aes(x=cover, y=prop2006, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,1)
 
 grid.arrange(p1, p2, nrows=1)
+# error
 
 ### 13 dec ###
-# it doesn't work. solutions:
-grid.arrange(p1, p2, nrow=1)
+# grid.arrange function didn't worked. solutions:
+grid.arrange(p1, p2, nrow=1) # without the plurar s
 # or:
 # use the package patchwork
 install.packages("patchwork")
 library(patchwork)
-p1+p2
+p1+p2 # so simple, right?
 # if you run p1/p2 you will have the 2 graphs one on top of the other
 
 # patchwork is working even with raster data but they should be plotted with
