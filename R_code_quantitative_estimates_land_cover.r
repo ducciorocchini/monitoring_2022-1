@@ -193,7 +193,7 @@ library(patchwork)
 p1+p2 # so simple, right?
 # if you run p1/p2 you will have the 2 graphs one on top of the other
 
-# patchwork is working even with raster data but they should be plotted with
+# patchwork is working even with raster data but they should be plotted with the ggplot2 package
 # instead of using plotRGB we are going to use ggRGB
 plotRGB(l1992, r=1, g=2, b=3, stretch="Lin")
 # let's do the same but with ggRGB
