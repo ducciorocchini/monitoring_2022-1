@@ -83,3 +83,43 @@ scale_fill_viridis(option = "cividis") +
 ggtitle("cividis palette")
 
 # now let's go to copernicus and download another image of the same set
+
+
+##### 17 december
+setwd("C:/lab/copernicus/")
+library(raster)
+library(ncdf4)
+library(RStoolbox)
+library(viridis)
+library(ggplot2)
+library(patchwork)
+
+# no we have 2 images in the copernicus folder, sonw cover august 2021 and december 2021.
+# let's import them together
+# first of all let's list the files. the common pattern we are going to use between the 2 images is SCE
+rlist <- list.files(pattern="SCE")
+rlist
+
+# now let's use the lapply function to apply the raster fucnction to rlist
+list_rast <- lapply(rlist, raster) # remember raster function to single layer images
+list_rast
+# in this manner we're going to import all the data in one shot
+#now let's make a stack 
+snow_stack <- stack(list_rast)
+snow_stack
+
+# let's assign simple name to the images
+ssummer <- snow_stack$Snow.Cover.Extent.1
+ssummer
+swinter <- snow_stack$Snow.Cover.Extent.2
+swinter
+
+
+
+
+
+
+
+
+
+
