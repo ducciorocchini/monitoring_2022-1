@@ -130,12 +130,11 @@ ggtitle("Snow cover during freezing winter !")
 # what is the synthax to put one image on top of the other? "/", while + is putting them one beside the other
 p1 / p2
 
-# you can crom your images in a certain area. for example i want to zoom in my country, Italy. how to do that? let's use coordinates
+# you can crop your images in a certain area. for example i want to zoom in my country, Italy. how to do that? let's use coordinates
 # the range in the longitude are between -180 and +180
-# the range in the latitude is from -90 to +90 but in our cse is betwen -30 and +90
+# the range in the latitude is from -90 to +90 but in our cse is betwen -25 and +90
 # let's zoom in italy
-# let's zoom the longitude from 0 to 20
-# and the latitude from 30 to 50
+# let's zoom the longitude from 0 to 20 and the latitude from 30 to 50
 # we're going to use the crop function. first lets create a vector with the extentions of our zoom
 ext <- c(0, 20, 30, 50)
 ssummer_crooped <- crop(ssummer, ext)
@@ -143,6 +142,7 @@ swinter_cropped <- crop(swinter, ext)
 
 stack_cropped <- crop(snowstack, ext) # this will crop the all stack and then single layer can be extracted
 
+# let's plot the cropped images
 p1 <- ggplot() +
 geom_raster(ssummer_cropped, mapping = aes(x=x, y=y, fill=Snow.Cover.Extent.1)) +
 scale_fill_viridis() +
