@@ -82,3 +82,42 @@ plot(preds$vegetation, col=cl)
 points(presences, pch=19)
 
 
+# 11 january
+# importing the source script
+# let's set the wd to upload the entire script "R_code_source_sdm.r" that we've saved in lab folder from virtuale
+setwd("C:/lab/")
+
+# we're going to use the source function: read R code from a File
+# source("name of the file")
+source("R_code_source_sdm.r")
+
+# we had created 'presences' and 'absences' (of species) objects, then we made a stack of predictors called 'preds'
+preds # the output are all the predictors we use: elevation, precipitation, temperature and vegetation
+
+# in the theoretical slide of SDMs we should use individual species and predictors
+
+# let's build the model
+# first we should explain to the software what are the date we're going to use
+# predictors can be called also explanatory variable
+# the species data are also called training data: we are training, explaining to the models where the species are
+
+# let's explain the model what are the training and predictors, in our case 'species' and 'preds', with sdmData function
+datasdm <- sdmData(train=species, predictors=preds)
+datasdm
+# one species in column called occurrence and 4 features (predictors). the type of data is presence-absence: 94-106.
+# we are going to make an sdm model
+# sdm function:fit and evaluate species distribution models. sdm(formula, data, methods, ...)
+# the formula: is the formula that explains the relationship (x/y graph) between presence-absence (y=occurrence) of species and the parameter (x). 
+# any line's formula is y=bx + a. a is the intercept while b is the slope. this is called linear model lm
+# if we add more predictors the formula became y= bx + a + b1x1 and so on
+# there are different methods in sdm but the more used is the generalized linear model
+m1 <- sdm(Occurrence ~ temperature+elevation+precipitation+vegetation, data=datasdm, methods="glm")
+
+
+
+
+
+
+
+
+
