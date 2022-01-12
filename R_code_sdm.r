@@ -113,6 +113,41 @@ datasdm
 # there are different methods in sdm but the more used is the generalized linear model
 m1 <- sdm(Occurrence ~ temperature+elevation+precipitation+vegetation, data=datasdm, methods="glm")
 
+# 12 january
+# let's recap what we've done up to now
+# let's load again the source code. before remember to set the wd
+stwd("C:/lab/")
+source("R_code_source_sdm.r")
+# explain to the software the date we're going to use
+datasdm <- sdmData(train=species, predictors=preds)
+# now let's build the sdm model
+m1 <- sdm(Occurrence ~ temperature+elevation+precipitation+vegetation, data=datasdm, methods="glm")
+m1
+# the final occurrence probability will be the sum of everything (a+b0x0 + b1x1 ...)
+# this is a model. now let's try to make the prediction.
+# predict function: can be applied to any model to make prediction, applying that model to the predictors
+# predict(model, data)
+p1 <- predict(m1, newdata=preds)
+# let's plot
+
+plot(p1, col=cl)
+# we make a prediction on the probability of presence of species from 0 to 1
+# we can expect that some part of the model are good, others not
+# let's plot the presences on top of this
+points(presences)
+# points will add presence's points to the previous graph
+# most of the point are located in those parts in which there is an higher probability of finding the species
+# but we have also some points in areas where the probability is low. this because we are not considering all the predictors that are important for that species
+
+# now let's make a final stack with everything all together
+s1 <- stack(preds, p1)
+# plot the final stack
+plot(s1, col=cl)
+# u can find species in all yellow area. we will find it at low elevation, high temperatures
+# let's change the names of the maps
+names(s1) <- c('elevation', 'precipitation', 'temperatures', 'vegetation', 'probability')
+# then replot
+plot(s1, col=cl)
 
 
 
