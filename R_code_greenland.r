@@ -63,7 +63,7 @@ par(mfrow=c(1, 2))
 hist(tgr$lst_2000)
 hist(tgr$lst_2015)
 
-# in 20015 2 picks.
+# in 20015 2 picks. anomaly, strange distribution
 
 
 par(mfrow=c(2, 2))
@@ -72,20 +72,45 @@ hist(tgr$lst_2005)
 hist(tgr$lst_2010)
 hist(tgr$lst_2015)
 
-# let's plot 2010 and 2015 (notes)
+# let's plot 2010 and 2015 (notes) to see if we have increasing temperature trend
+# Xlim and ylim are needed to let the line starting form the conjuction between the 2 axis
 plot(tgr$lst_2010, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
 abline(0,1,col="red")
+# all the first block of dots is higher in 2015 then 2010 since basically all the points are above the line
 
-# let's do this for all the value, histogram and regression line
+# make a plot with all the histograms and all the regressions for all the variables
 par(mfrow=c(4,4))
 hist(tgr$lst_2000)
 hist(tgr$lst_2005)
 hist(tgr$lst_2010)
 hist(tgr$lst_2015)
+plot(tgr$lst_2000, tgr$lst_2005, xlim=c(12500,15000), ylim=c(12500,15000))
+plot(tgr$lst_2000, tgr$lst_2010, xlim=c(12500,15000), ylim=c(12500,15000))
+plot(tgr$lst_2000, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
+plot(tgr$lst_2005, tgr$lst_2010, xlim=c(12500,15000), ylim=c(12500,15000))
+plot(tgr$lst_2005, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
 plot(tgr$lst_2010, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
-plot(tgr$lst_2010, tgr$lst_2000, xlim=c(12500,15000), ylim=c(12500,15000))
+plot(tgr$lst_2000, tgr$lst_2005, xlim=c(12500,15000), ylim=c(12500,15000))
+abline(0,1,col="red")
+plot(tgr$lst_2000, tgr$lst_2010, xlim=c(12500,15000), ylim=c(12500,15000))
+abline(0,1,col="red")
+plot(tgr$lst_2000, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
+abline(0,1,col="red")
+plot(tgr$lst_2005, tgr$lst_2010, xlim=c(12500,15000), ylim=c(12500,15000))
+abline(0,1,col="red")
+plot(tgr$lst_2005, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
+abline(0,1,col="red")
+plot(tgr$lst_2010, tgr$lst_2015, xlim=c(12500,15000), ylim=c(12500,15000))
+abline(0,1,col="red")
 
-# or using the stackthanks to the paris function
-paris(tgr)
-
-# 
+# but we are lazy people we don't want to run all these line of code 
+# we can achieve the same result by using the stack thanks to the pairs function
+# pairs funciton creates scatterplot matrices
+pairs(tgr)
+# we have 4 histograms since we have 4 variables and then we compare variables
+# to know how many plot u will have for comparisons between N variables is [N(N-1)]/2
+# so in this case 4 histograms and 6 comparisons
+# let's cocompare lst200 with lst20015 there is a kind of head of datas, that are the lower temperature that in 2015 are higher than in 2000, they are above the abline
+# especially u can see the anomaly in the histogram of 2015
+# it means there is a rise especially in the lowest temperature that are those guaranteing the ice to be there otherwise there is ice melt, that is what we are experiencing in fact
+# it is the same we have said by observing the graphs
