@@ -1,19 +1,17 @@
 # R code for species distribution modelling, namely the distribution of individuals of a population in space
-
-install packages ("sdm")
+# now let's move to population analysis thanks to the species distribution modelling: distribution of individuals of the same species
+# we will need the package sdm
+install.packages/"sdm")
 # let's recall the packages we'll need
 library(raster)
 library(sdm) # predictors
 library(rgdal) # species
 
-# system.file() function that shows all the files in a certain package. find names of R system files, in this case in the package sdm
-file <- system.file("external/species.shp", package="sdm") 
+# system.file() function that shows the files in a certain package. in this case in the package sdm
+file <- system.file("external/species.shp", package="sdm") #the first argument is the path for the file: external folder inside sdm folder inside R folder / name of the file, and then the package in which there is the file
 file # the output is the path to reach the data
-species <- shapefile(file)
-
-# let's plot the species data
 # recreating a file inside R with the function shape.file() 
-species <- shapefile(file) # exacltly as raster function for raster files
+species <- shapefile(file) # shapefile() function to read or write a shapefile (in raster package)g. exacltly as raster function for raster files
 # let's plot
 plot(species, pch=19, col=red) # pch dor the shape of the points in the plot
 
