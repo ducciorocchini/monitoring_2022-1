@@ -8,20 +8,19 @@ library(vegan)
 # set the working directory
 setwd("C:/lab/multivar")
 
-# load function to load properly R data. it relload saved dataset
-load("biomes_multivar.RData") # include the extension .RData eve if windows masks it in the name of the file
+# load function to load properly R data. it reload saved datasets. load("x"), where x=the dataset we want to upload
+load("biomes_multivar.RData") # NB:include the extension ".RData" even if windows masks it in the name of the file
 
-# ls function in R. list objects. 
-ls() # in this manner we are seeing all the object that i have in R data
-# the output is "biomes"       "biomes_types" "cl"           "snow2000" 
+# list function in R, used to list objects. 
+ls() # in this manner we are seeing all the object that we have in R data
+# the output is  "biomes",   "biomes_types",   "cl",   "snow2000" 
 # if i put
 biomes
-# i obtain all the data set: plots are raws and columns are species
-
+# i obtain the all data set: plots are rows (so the sites) and columns are species
+# es the first plot has only 1 individual of chesnut(castanea sativa) and 0 individual for all other species, this might means that this is plot in a temperate forest not a tropical one
 biomes_types
-# here we can see for each plot the type of the biomes
+# here we can see for each plot the type of the biome: for instance we can see that the plot 1 is indeed the temperate biome
 
-# presentation in virtuale
 # biome table composition
 # in tropical forest: giant_orb, rafflesia, red_colubus, tree_fern, orangutan, pandinus, pleurotus, dinoponera, lianas, tiger, banana tree, mosses, python
 # broadleaf continental forest: beech, alnus, squirrel, fox, toad, maple_acer, oak, viper, deer, brown_bear, chestnut, robin_bird
