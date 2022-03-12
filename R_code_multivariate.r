@@ -27,52 +27,45 @@ biomes_types
 # coniferous forests: fir_abies, wolves, lynx
 # tundra: lichens, reindeer
 
-# byomes types: for each ployt there is the biome type
-
-# we're make use of the detrendence correspondance analysis
-# decorana() function
-# multivariate analysis really used for species
-# we're using decorana funciton with the biome table
+# we're going to make use of the detrendence correspondance analysis
+# is a simple multivariate technique for arranging species and samples along environmental gradients.
+# we will use decorana() function with the biomes table and store in the "multivar" object
 multivar <- decorana(biomes)
 multivar
-
+# the output is a table with 3 raws: Eigenevalues, decorana values and axis length, and 4 columns that represents the axis
+# Eigenvalues represents the amount of variance explained by the different axis. actually these are the original vegan values, the real variance is explained by decorana values row
+# axis length means the real final lenth of the axis
 # DCA1 51%, DCA2 30%. with 2 axis we have a variability of 81% so we can compact the system in two axis
-# let's make a plot
+# let's use them to make a plot
 plot(multivar)
-# red writings are species. dot are axis of which we see only the point
-# the plot is directly showing only the 2 axis that shows the majority of the variability
-# the first 2 exis indemitting are explaining the most of the variance it is not by chance
-# de me is passing the first axis in the majortìity TAG ca 1.45 h
+# red writings are species. dots are axis of which we see only the point
+# the plot is directly showing only the first 2 axis that shows the majority of the variability
+# it is "aauthomatic" that the first 2 axis in the method are explaining the most of the variance, it is not by chance
+# the method is being thought to pass the 1st axis in the highest range possible of the data, and it will be even longer (axis lenth), then the variability represented by axis and so their lenght will be decreasing.
+# it is not cosen by the operator, is a methodological point
 
-# lets plot the biomes_type with the function ordiellipse() to see if these species are grouped together in the same biome or not
-# ordiellipse (): include all of the plot in a certain biomes. make some groups inside our space
-# attach function is used when u want to use a dataset
-# attach(): attach set of R objects 
-# let's tske a look at the grouping of species. are them in the same biome ?
-# tag explain this function
+# let's take a look at the grouping of species to see if those species are in the same biome
+# lets plot the biomes_type in the previous plot with the function attach() and ordiellipse() to see if these species are grouped together in the same biome or not
+# attach function is used when u want to use a dataset. attach(): attach set of R objects to search path
+# ordiellipse (): include all of the plots in a certain biomes. make some groups inside our space
+# arguments of this function: the first is the multivariate space in which we want to put the ellipse that is the object to which we associated the decorana function, so "multivar"
+# then the type of biome that we can find in the 2nd column of the biomes_types table that is named "type"
+# then u can chose a color for each biome
+# then we should explain the kind (kind=) of graph we want to use, that is "ehull" convex shape that incorporates all the plot
+# then the thickness of the lin lwd=
 
 attach(biomes_types)
 ordiellipse(multivar, type, col=c("yellow", "red", "purple", "green"), kind="ehull", lwd=3) # this will represent 4 different biomes
-# 4 ellipse making a conjunction. taking dome points and include them in the shape of the ellipse
+# the output is the previous graph with 4 ellipse making a conjunction of all the plots in a common shape. the most small ellipse possible containing all the plots of that biome
+# nb that for this to work u must mantain open the plot obtained with plot(multivar)
+
+#now we can name the ellipses with the name of the biome that represents with the ordispider() function with simila arguments of ordiellipse
 ordispider(multivar, type, col=c("yellow", "red", "purple", "green"), label=TRUE)
-# now we have the lable that states for each ellips what it groups
-# es in the tropical forest we can see these species are linked together and atteined to the same biome
-# there are species in the same xones but a bit a part. the core is the ellipse but 
-# we can have some overlapping
+# thanks to this function we have joined in the label the single plots
+# es in the tropical forest we can see these species are living together and atteined to the same biome
+# there are species in the same zones but a bit far form the ellipse. the core is the ellipse but they are part of the same biome
+# we can have some overlapping, some individuals attaining to different biomes
 
-# so we started with a certain thable from which we cannot understand how the indi are correlated to each other. so we can make a graph in which the aboundances of ind are shown and also the relation between organisms and biomes
-# imagine that in a certain area u destroy the tropical forest biome. the composition of species will change so tha graph will change a lot and all tropical forest will disappear from the graphs
-# this is called multivariate analysis a method to see how organisms are related to each other
-
-
-
-
-
-# now populations: individuals of the same species
-install.packages/"sdm")
-library(sdm)
-# species distribution modeling: modeling of the individual of the same speices
-# presentation in virtuale: population ecology
-
-
-
+# so we started with a certain table from which we cannot understand how the ind are related to each other. so we can make a graph to see how the aboundances of ind are connected to eachother and with the type of biome
+# imagine that in a certain area u destroy the tropical forest biome. the composition of species will change so the graph will change a lot and all tropical forest will disappear from the graph
+# this is called multivariate analysis a method to see how in a community organisms are related to each other
