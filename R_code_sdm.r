@@ -17,67 +17,85 @@ plot(species, pch=19, col=red) # pch dor the shape of the points in the plot
 
 
 
-#### 10 January
+#### 10 January ####
 # let's recall the libraries we need
 library(sdm)
-library(raster) #predictor, the env variables i use to predict where the species can be found in the space
-library(rgdal) #species, vector data: arrays of coordinates
-# OSGeo project
-# we are working with 2 dimensions
-# we are going to deal with series of coordinates in space. species are an array of x and y points (see notes)
+library(raster) # we will use to plot all predictors, the env variables i use to predict where the species can be found in the space
+library(rgdal) # for species data, vector data: arrays of coordinates; species are an array of x and y points (since we are working in 2 dimensions
 
-# species data. inside external, a folder inside sdm package, there are all the data
-file <- system.file("external/species.shp", package="sdm")
-file
-# shapefile is the correspondent funciton of raster, it cathces the points and put them in R
+# species data. inside "external", a folder inside sdm package, there are all the data
+file <- system.file("external/species.shp", package="sdm") #
+file # u have the path to where to find the data species.shp in the computer
+# inside external a part form species.shp (graphical part) there are different others files; es species.dbf (table), species.prj (info about coordinate system), species.shx (links every point to a row in the dbf table)
+
+# shapefile() function is the correspondent funciton of raster, it cathces the points and import them in R
 species <- shapefile(file) # exatcly as the raster function for raster files
 species
-# just one variable: occurrence. if u put species$Occurrence u have the occurrence for all the species. all the point are recorded with 0 and 1 
+# class: spatial points data frame
+# just one variable: occurrence. if u put species$Occurrence u have the occurrence for all the species. all the point are recorded with 0 (absent) and 1 (present) 
 species$Occurrence
-# i want to make a subset. let's use sql, language for subsetting the data. let's make a subset of the species which are presents, so the 1.
-# how many occurrences are there?
-# u can count all the 1 but we are lazy
-# i will put my dataset and inside i make the query, wich is done by []
-presences <- species[species$Occurrence == 1,] # i want to subsetonly the occurrences equal to 1. in this case the symble is double equal, ==. if u want to take the occurrences different from 1 only single equal and !, !=.
-# control symble, used to explain to the software theìat the query is finished. in R is a comma
-# u obtain the datafram with 94 points which are the points equal to 1
-# let's hsk for the occurrences equal to zero
+
+# let's make a subset of the species which are presents, so the 1. let's use sql, language for subsetting the data
+# i want to subset only the occurrences so only the data equal to 1. in this case i use the [] to make a query and extract only the data equals to 1.
+# symbol for "equal to": == , symbol for "different from": !=
+presences <- species[species$Occurrence == 1,] # control symble, used to explain to the software theìat the query is finished. in R is a comma
+presences
+# u obtain the dataframe with 94 points which are the points equal to 1
+# let's ask for the occurrences equal to zero, we expect that are 106 since the total is 200
 absences <- species[species$Occurrence == 0,] #or != 1
+absences
+
 # now we can plot all the datas
-plot(species, pch=19) #we have all the points
-# let's plot only presences
-plot(presences, pch=19, col="blue") # less points
+plot(species, pch=19) # plot all the points
+
+plot(presences, pch=19, col="blue") # plot only presences, so we have less points
 #let's add to this plot also the absences. so make a single plot with presences and absences, differentiated by color
 # to add points to a plot use points()
 points(absences, pch=19, col="red")
 
-# predictors (tag till the end)
-# look at the path
+# predictors are environmental variables can be used to predict what will be the presence of a certain species in a certain part of the map (es maybe where u don't have observed data)
+# these are all raster data. let's explain the path to where to find these data with system.file function and the assign it to an object, path
 path <- system.file("external", package="sdm")
-path #u obtain the folder of the predictors data, that all have the same extention, asc sort of txt. the type of file is ASCII
-# the environmental variables are in the same folder of the species but with the extenction asc
-# let's make a list with all the variables
-lst <- list.files(path, pattern="asc", full.names=T)
-# tag why full names
-# let's make the stack of this list
-# u can use the lapply function with the raster function but in this case is not needed since the data are inside the package and have asc extention
+path #u obtain the path for the folder of the predictors data, which is the same folder of the species (external) 
+# environmental variables have all the same extention, asc, a sort of txt. the type of file is ASCII
+# let's make a list with all the environmental variables, that share the extention asc
+lst <- list.files(path, pattern="asc", full.names=T) #full.names = true to explain u want the full name of the file if not he cannot read the extension
+
+# let's make directly the stack of this list
+# u could use the lapply function with the raster function but in this case is not needed since the data are inside the package and have asc extention
 preds <- stack(lst)
 preds
 
 #plot preds
 cl <- colorRampPalette(c("blue", "orange", "red", "yellow"))(100)
 plot(preds, col=cl)
+# north and west part is at low elevation, infact in this areas there are higher temperatures. peak in elevation that could be a mountain and very low T 
+# precipitations are mainly in mountains at lower T but also in the valley so they do not follow only elevation
 
+# let's plot the presences with every single variables
+#elevation
 plot(preds$elevation, col=cl)
 points(presences, pch=19)
+# most insividuals aer found in the low elevation areas
 
-
-
+#temperatue
 plot(preds$temperature, col=cl)
 points(presences, pch=19)
+# most individuals are found in middle-high temperatures
 
+#vegetation
 plot(preds$vegetation, col=cl)
 points(presences, pch=19)
+# individuals are found where there is vegetation cover
+
+# precipitation
+plot(preds$precipitation, col=cl)
+points(presences, pch=19)
+# intermediate precipitation
+
+# u could plot all the graphs together with par
+
+# there are some parts in the map for which we have no data. for these parts we can make a model with our predictors
 
 
 # 11 january
@@ -111,7 +129,7 @@ datasdm
 # there are different methods in sdm but the more used is the generalized linear model
 m1 <- sdm(Occurrence ~ temperature+elevation+precipitation+vegetation, data=datasdm, methods="glm")
 
-# 12 january
+#####  12 january
 # let's recap what we've done up to now
 # let's load again the source code. before remember to set the wd
 stwd("C:/lab/")
