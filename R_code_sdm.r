@@ -128,38 +128,29 @@ m1
 # divide our map in pixels and for each of them stating the probability of occurrence according to our model
 
 #####  12 january
-# let's recap what we've done up to now
-# let's load again the source code. before remember to set the wd
-stwd("C:/lab/")
-source("R_code_source_sdm.r")
-# explain to the software the date we're going to use
-datasdm <- sdmData(train=species, predictors=preds)
-# now let's build the sdm model
-m1 <- sdm(Occurrence ~ temperature+elevation+precipitation+vegetation, data=datasdm, methods="glm")
-m1
 # the final occurrence probability will be the sum of everything (a+b0x0 + b1x1 ...)
 # this is a model. now let's try to make the prediction.
 # predict function: can be applied to any model to make prediction, applying that model to the predictors
 # predict(model, data)
 p1 <- predict(m1, newdata=preds)
-# let's plot
-
+p1 # it is a raster layer
+# let's plot this prediction
 plot(p1, col=cl)
-# we make a prediction on the probability of presence of species from 0 to 1
-# we can expect that some part of the model are good, others not
-# let's plot the presences on top of this
+# we make a prediction on the probability of presence of species from 0 to 1. we can expect that some part of the model are good, others not
+# let's plot the presences on top of this to verify this
 points(presences)
-# points will add presence's points to the previous graph
+# points() function will add presence's points to the previous graph
 # most of the point are located in those parts in which there is an higher probability of finding the species
-# but we have also some points in areas where the probability is low. this because we are not considering all the predictors that are important for that species
+# but we have also some points in areas where the probability is low: so the model is not in line with the origina datas
+# this could happen because we are not considering all the predictors that are important for that species
 
-# now let's make a final stack with everything all together
+# now let's make a final stack with everything all together: predictors and final prediction
 s1 <- stack(preds, p1)
 # plot the final stack
 plot(s1, col=cl)
-# u can find species in all yellow area. we will find it at low elevation, high temperatures
-# let's change the names of the maps
-names(s1) <- c('elevation', 'precipitation', 'temperatures', 'vegetation', 'probability')
+# u can find species in all yellow area. u can relate this probability of presence to the predictors: we will find mainly species at low elevation, at high temperatures and so on
+# let's change the names of the maps with the names() function
+names(s1) <- c('Elevation', 'Precipitation', 'Temperatures', 'Vegetation', 'Probability')
 # then replot
 plot(s1, col=cl)
 
