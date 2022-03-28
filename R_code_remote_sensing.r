@@ -1,53 +1,77 @@
-# ------------- day 1 October 29th
 # R code for ecosystem monitoring by remote sensing
 # First of all we need to install additional packages
-# raster package to manage image data
+# raster package allows the reading, writing, manipulating, analyzing and modeling of spatial data
 # https://cran.r-project.org/web/packages/raster/index.html
-
+# to use a new package in R we need to install it first. 
+# this can be done by using the function install.packages(), with the name of the package under quotes as an argument
 instal.packages("raster")
-
+# up to now it's like we have bought a book and we have put it in our library. then when we want to read the book we must take it from the library and open it
+# the same for the packages! when we need to use them we recall them with the function library() with the name of the package as an argument. NB: this time without "" since the package is already in R
 library(raster)
 
-#l'et's import our data in R
-#rirst set the working directory to make know R where the files are
-
+# let's import our data in R
+# first set the working directory to make know R where the files are
 setwd("C:/lab/")
 
-#we are going to import satellite data
+#we are going to import satellite data in R with brick function.
+# it is a function needed to read satellite images and it is inside the raster package, that's why we need it.
+# inside the brackets the name of the file we want to import under quotes since we are exiting R
+# finally let's assign the file imported to the object l2011 for it to be more manageable
 l2011 <- brick("p224r63_2011.grd")
+l2011 
+# here we have the summary of the file with all its features: 
+# class: rasterbrick, 
+# dimensions n of rows and columns -> n of pixel (cells), n of layers
+# resolution of each pixel
+# extent: resolution based on utm system
+# source: data in my computer 
+# crs, coordinate reference system, refers to the way in which spatial data that represent the earth's surface (which is round 3D) are flattened so that you can “Draw” them on a 2D surface
+# names: name of bends. Ex B1_sre, where sre means spectrum reflectance. there are 7 layers so 7 bends from B1 to B7
+# min and max values. they refers to values of reflectance that can range from 0 (only absorption) to 1 (only reflectance)
 
-l2011
-
+# now let's plot it to see the image
 plot(l2011)
 
+# Each band have a range of nm of light that correspond to the wavelenght of the light they're measuring
+# The first 3 bends are the visible part of the satellite images
 # B1 is the reflectance in the blue band
 # B2 is the reflectance in the green band
 # B3 is the reflectance in the red band
 
+# At first r shows you the plot with a default palette, but you can chage the colors 
+# colorRampPalette function extend a color palette to a color ramp so it is changing color u want to use to show different bends
 cl <- colorRampPalette(c("black", "grey", "light grey"))(100)
 plot(l2011, col=cl)
 
+# now let's make an RGB plot: Make a Red-Green-Blue plot based on three layers (in a RasterBrick or RasterStack).
+# red green and blue are the basic colors used in computers. then we have the bends and we associate to each computer component a certain bend
+# We are maching the bends we have in the RGB components of the computer
+# The function used is plotRGB(). red.green.blue plot of a multi-layered raster object
+# the arguments are the rasterbrick object to plot, the bend to put in the red channel, in the green channel and in the blue one
 plotRGB(l2011, r=3, g=2, b=1, stretch="Lin")
 
 
-#--------------- day2 November 5th
-
+####### day2 #######
+# we said that our l2011 file is a satellite image composed by 7 layers. each one is measuring the reflectance of objects in the landscape with a certain wavelength:
 # B1 is the reflectance in the blue band
 # B2 is the reflectance in the green band
 # B3 is the reflectance in the red band
-# B4 is the reflectance in the NIR band
+# B4 is the reflectance in the NIR band (near infrared)
+# B5 is the reflectance in the short-wave infrared
+# B6 is the reflectance in the thermal infrared
+# B7 is the reflectance in the short wave infrared
+# Then each layer has different pixel wich have different values. Each pixel correspond to the amount of the wavelenght reflected that the layer is measuring.
 
-#we want to plot only green band. 
-#in the file the name of this band is B2_sre, u can see it in the "names" line.
-#so we must link l2011 with the bend n 2 using $
-
+# we want to plot only green band. 
+# in the file the name of this band is B2_sre, u can see it in the "names" line, from l2011 output.
+# so we must link l2011 with the bend n 2 using $
 plot(l2011$B2_sre)
 
 #let's change the colors of the plot. using the colorRampPalette function
 cl <- colorRampPalette(c("black", "grey", "light grey"))(100)
-
-# Let's plot the bend 2 with the colors we've decided
 plot(l2011$B2_sre, col=cl)
+# Black is the colors of the objects that are absorbing light, light grey is the color for obj that are reflecting a lot and everything in the middle will be grey
+# So the scale is from 0 to 1. 0:black, 1:lightgrey, And in the middle grey
 
 # change the colorRampPalette with dark green, green and light green
 clg <- colorRampPalette(c("dark green", "green", "light green"))(100)
@@ -58,7 +82,12 @@ plot(l2011$B2_sre, col=clg)
 clb <- colorRampPalette(c("dark blue", "blue", "light blue"))(100)
 plot(l2011$B1_sre, col=clb)
 
-#now we want to plot both images in just one multiframe graph 
+
+### NB something ultrausefull
+# Now we have the same plot every time with changed colors but once we create one we cancel and pass to the next
+# Imagine we want the green and the blue together one beside the other. This is done with a function called par
+# par() function: it sets or query graphicl parameters. So used to do any change to a graph
+# We take the window of the graph and doing the multiframe. The multiframe is recalled by the argument mfrow
 # let's create a multiframe with 1 row and 2 columns
 par(mfrow=c(1,2)) #the first number is the number of rows in the multiframe while the second is the number of columns
 plot(l2011$B1_sre, col=clb)
