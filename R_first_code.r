@@ -15,7 +15,7 @@ plot(water, fishes) # the first argument u put inside the brackets will be the x
 # the data developped can be stored in a table, that in R is called data frame
 # to build it let's use the data.frame() function, as usual inside () there are the arguments that are our variables x and y
 # let's store the data frame into the object "streams"
-streams <- data.frame(Water, fishes)
+streams <- data.frame(water, fishes)
 streams
 
 # from now on we're going to import and/or export data. There fore we need to set the working directory
