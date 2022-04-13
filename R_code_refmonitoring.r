@@ -20,9 +20,16 @@ plot(FCOVERstack)
 names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4","FCOVER.5")
 plot(FCOVERstack)
 
+
 ext <- c(-50, -40, -20, -15)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
+
+#export
+png("outputs/fcover_plot.png", res = 300, width = 3000, height = 3000)
+plot(FCOVERcrop)
+dev.off()
+
 
 FCOVER2000 <- FCOVERcrop$FCOVER.1
 FCOVER2005 <- FCOVERcrop$FCOVER.2
@@ -45,6 +52,12 @@ g5 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.
 grid.arrange(g1, g2, g3, g4, g5, nrow=3)
 #or through patchwork package 
 g2 + g1 + g3 / g4 + g5
+
+# export
+png("outputs/fcover_ggplot.png", res=300, width = 3000, height= 3000)
+grid.arrange(g1, g2, g3, g4, g5, nrow=3)
+dev.off()
+
 
 cl <- colorRampPalette(colors = c("#edf8fb", "#b2e2e2", "#66c2a4", "#2ca25f", "#006d2c"))(100)
 plot(FCOVERcrop, col = cl)
@@ -82,3 +95,63 @@ plot(FCOVER2010, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000"
 abline(0,1, col="red")
 plot(FCOVER2015, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
 abline(0,1, col="red")
+
+
+# export
+png("outputs/fcover_regressionmod.png", res = 300, width = 3000, height = 3000)
+par(mfrow=c(3,4))
+plot(FCOVER2000, FCOVER2005, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2000, FCOVER2005, xlim = c(0,1), ylim= c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2000, FCOVER2010, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2000, FCOVER2015, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2000, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2005, FCOVER2010, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2005, FCOVER2015, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2005, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2010, FCOVER2015, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2010, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+plot(FCOVER2015, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2005")
+abline(0,1, col="red")
+dev.off()
+
+
+# plot frequency distribution data with histograms
+par(mfrow=c(3,2))
+hist(FCOVER2000)
+hist(FCOVER2005)
+hist(FCOVER2010)
+hist(FCOVER2015)
+hist(FCOVER2020)
+
+#export
+png("outputs/fcover_hist.png", res = 300, width = 3000, height = 3000)
+par(mfrow=c(3,2))
+hist(FCOVER2000)
+hist(FCOVER2005)
+hist(FCOVER2010)
+hist(FCOVER2015)
+hist(FCOVER2020)
+dev.off()
+
+####### or paris
+
+# plot difference between 2000 and 2020
+dif <- FCOVER2000 - FCOVER2020
+cl1 <- colorRampPalette(colors = c("#ca0020", "#f4a582", "#636363", "#a6dba0", "#008837"))(100)
+plot(dif, col=cl1, main="difference between fcover of 2000 and 2020")
+
+# export
+png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
+plot(dif, col=cl1, main="difference between fcover of 2000 and 2020")
+dev.off()
+
