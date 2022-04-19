@@ -21,7 +21,7 @@ names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4")
 plot(FCOVERstack)
 
 
-ext <- c(-45.4, -44.5, -18.9, -17.6)
+ext <- c(-46.5, -44, -20, -17)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
 
