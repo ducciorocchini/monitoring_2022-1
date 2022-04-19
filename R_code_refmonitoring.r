@@ -135,3 +135,4 @@ png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
 plot(dif, col=cl1, main="difference between fcover of 2000 and 2012")
 dev.off()
 
+
