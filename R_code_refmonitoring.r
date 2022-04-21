@@ -20,7 +20,6 @@ plot(FCOVERstack)
 names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4")
 plot(FCOVERstack)
 
-
 ext <- c(-46.5, -44, -20, -17)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
@@ -69,9 +68,9 @@ dev.off()
 # plot FCOVER for eac year
 par(mfrow = c(2,2))
 plot(FCOVER2000, main = "Forest cover in 2000", col = cl)
-plot(FCOVER2004, main = "Forest cover in 2005", col = cl)
-plot(FCOVER2008, main = "Forest cover in 2010", col = cl)
-plot(FCOVER2012, main = "Forest cover in 2015", col = cl)
+plot(FCOVER2004, main = "Forest cover in 2004", col = cl)
+plot(FCOVER2008, main = "Forest cover in 2008", col = cl)
+plot(FCOVER2012, main = "Forest cover in 2012", col = cl)
 
 # compare fcover between each year with a linear regression model (scatterplot)
 par(mfrow=c(3,4))
@@ -136,3 +135,4 @@ plot(dif, col=cl1, main="difference between fcover of 2000 and 2012")
 dev.off()
 
 
+## leaf area index
