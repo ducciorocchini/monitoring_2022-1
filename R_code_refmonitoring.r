@@ -136,3 +136,69 @@ dev.off()
 
 
 ## leaf area index
+
+LAIlist <- list.files(pattern = "LAI")
+LAIrast <- lapply(LAIlist, raster)
+LAIstack <- stack(LAIrast)
+
+names(LAIstack) <- c("LAI.1", "LAI.2", "LAI.3", "LAI.4")
+
+LAIcrop <- crop(LAIstack, ext)
+plot(LAIcrop)
+LAIcl <- colorRampPalette(c("red", "light blue", "yellow"))(100)
+plot(LAIcrop, col=LAIcl)
+
+png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
+plot(LAIcrop, col=LAIcl)
+dev.off()
+
+
+LAI2000 <- LAIcrop$LAI.1
+LAI2004 <- LAIcrop$LAI.2
+LAI2008 <- LAIcrop$LAI.3
+LAI2012 <- LAIcrop$LAI.4
+
+LAI2000_df <- as.data.frame(LAI2000, xy=TRUE)
+LAI2004_df <- as.data.frame(LAI2004, xy=TRUE)
+LAI2008_df <- as.data.frame(LAI2008, xy=TRUE)
+LAI2012_df <- as.data.frame(LAI2012, xy=TRUE)
+
+LAIg1 <- ggplot() + geom_raster(LAI2000_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
+LAIg2 <- ggplot() + geom_raster(LAI2004_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2004") + labs(fill = "LAI")
+LAIg3 <- ggplot() + geom_raster(LAI2008_df, mapping = aes(x=x, y=y, fill=LAI.3)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2008") + labs(fill = "LAI")
+LAIg4 <- ggplot() + geom_raster(LAI2012_df, mapping = aes(x=x, y=y, fill=LAI.4)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2012") + labs(fill = "LAI")
+LAIg1 + LAIg2 + LAIg3 + LAIg4
+
+#export
+png("outputs/LAI_ggplot.png", res=300, width=3000, height=3000)
+LAIg1 + LAIg2 + LAIg3 + LAIg4 + LAIg5
+dev.off()
+
+#plot with cl palette
+plot(LAIcrop, col=cl)
+
+#export
+png("outputs/LAI_plot_real.png", res=300, width=3000, height=3000)
+plot(LAIcrop, col=cl)
+dev.off()
+
+
+LAIdif <- LAI2000 - LAI2012
+cl1 <- colorRampPalette(colors = c("#ca0020", "#f4a582", "#636363", "#a6dba0", "#008837"))(100)
+plot(LAIdif, col=cl1, main="difference between Leaf Area Index of 2000 and 2012")
+
+# export
+png("outputs/LAI_dif.png", res = 300, width = 3000, height = 3000)
+plot(LAIdif, col=cl1, main="difference between Leaf Area Index of 2000 and 2012")
+dev.off()
+
+
+pairs(LAIcrop)
+
+png("outputs/LAI_pairs.png", res=300, width=3000, height=3000)
+pairs(LAIcrop)
+dev.off()
+
+
+
+                
