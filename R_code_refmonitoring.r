@@ -20,7 +20,7 @@ plot(FCOVERstack)
 names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5", "FCOVER.6")
 plot(FCOVERstack)
 
-ext <- c(-46.5, -44, -20, -17)
+ext <- c(-43, -40, -21, -18)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
 
@@ -51,7 +51,7 @@ g4 <- ggplot() + geom_raster(FCOVER2012_df, mapping = aes(x=x, y=y, fill=FCOVER.
 g5 <- ggplot() + geom_raster(FCOVER2016_df, mapping = aes(x=x, y=y, fill=FCOVER.5)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2016") + labs(fill = "FCOVER")
 g6 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.6)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
 
-grid.arrange(g1, g2, g3, g4, g5, g6 nrow=3)
+grid.arrange(g1, g2, g3, g4, g5, g6, nrow=3)
 #or through patchwork package g2 + g1 + g3 / g4 
 
 # export
@@ -185,6 +185,9 @@ png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
 plot(dif, col=cl1, main="difference between fcover of 2000 and 2020")
 dev.off()
 
+
+
+
 # let's use fcover data 300 m to increase the resolution
 rlist300 <- list.files(pattern = "FCOVER300")
 list_rast300 <- lapply(rlist300, raster)
@@ -192,18 +195,42 @@ FCOVER300stack <- stack(list_rast300)
 plot(FCOVER300stack)
 
 
-
-FCOVER300crop <- crop(FCOVER300stack, ext)
+ext300 <- c(-41.5, -41 -19.8, -19.3)
+FCOVER300crop <- crop(FCOVER300stack, ext300)
 plot(FCOVER300crop)
 
+names(FCOVER300stack) <- c("FCOVER300.1","FCOVER300.2","FCOVER300.3","FCOVER300.4")
+
+FCOVER300_2014 <- FCOVER300crop$FCOVER300.1
+FCOVER300_2016 <- FCOVER300crop$FCOVER300.2
+FCOVER300_2018 <- FCOVER300crop$FCOVER300.3
+FCOVER300_2020 <- FCOVER300crop$FCOVER300.4
+
+FCOVER300_2014_df <- as.data.frame(FCOVER2014, xy=TRUE)
+FCOVER300_2016_df <- as.data.frame(FCOVER2016, xy=TRUE)
+FCOVER300_2018_df <- as.data.frame(FCOVER2018, xy=TRUE)
+FCOVER300_2020_df <- as.data.frame(FCOVER2020, xy=TRUE)
+
+g300.1 <- ggplot() + geom_raster(FCOVER300_2014_df, mapping = aes(x=x, y=y, fill=FCOVER300.1)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2014") + labs(fill = "FCOVER")
+g300.2 <- ggplot() + geom_raster(FCOVER300_2016_df, mapping = aes(x=x, y=y, fill=FCOVER300.2)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2016") + labs(fill = "FCOVER")
+g300.3 <- ggplot() + geom_raster(FCOVER300_2018_df, mapping = aes(x=x, y=y, fill=FCOVER300.3)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2018") + labs(fill = "FCOVER")
+g300.4 <- ggplot() + geom_raster(FCOVER300_2020_df, mapping = aes(x=x, y=y, fill=FCOVER300.4)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
+
+grid.arrange(g300.1, g300.2, g300.3, g300.4, nrow=2)
 
 
+par(mfrow = c(2,2))
+plot(FCOVER300_2014, main = "Forest cover in 2014", col = cl)
+plot(FCOVER300_2016, main = "Forest cover in 2016", col = cl)
+plot(FCOVER300_2018, main = "Forest cover in 2018", col = cl)
+plot(FCOVER300_2020, main = "Forest cover in 2020", col = cl)
 
 
+pairs(FCOVER300crop)
 
 
-
-
+dif300 <- FCOVER300_2014 - FCOVER300_2020
+plot(dif300, col=cl1, main="Difference between FCOVER in 2014 and 2020)
 
 
 
@@ -294,6 +321,5 @@ dev.off()
 
 
 
-# NDVI
 
                 
