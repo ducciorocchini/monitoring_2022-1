@@ -328,6 +328,13 @@ NDVIstack <- stack(NDVIrast)
 NDVIcrop <- crop(NDVIstack, ext)
 plot(NDVIcrop)
 
+names(NDVIstack) <- c("NDVI2014","NDVI2016","NDVI2018","NDVI2020")
+
+plotRGB(NDVIcrop, r=NDVI2014, g=NDVI2018, b=NDVI2020, stretch="Lin")
+
+
+
+
 
 
 DMPlist <- list.files(pattern="DMP")
