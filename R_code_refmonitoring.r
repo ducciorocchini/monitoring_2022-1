@@ -274,8 +274,8 @@ list_rast300 <- lapply(rlist300, raster)
 FCOVER300stack <- stack(list_rast300)
 #plot(FCOVER300stack)
 
-# ext300 <- c(-45.5, -45, -17, -18.2, -17.7)
-FCOVER300crop <- crop(FCOVER300stack, ext)
+# ext300 <- c(-46, -45, -19, -18)
+FCOVER300crop <- crop(FCOVER300stack, ext300)
 plot(FCOVER300crop)
 
 names(FCOVER300stack) <- c("FCOVER300.1","FCOVER300.2","FCOVER300.3","FCOVER300.4")
