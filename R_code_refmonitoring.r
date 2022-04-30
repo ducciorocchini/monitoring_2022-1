@@ -1,4 +1,4 @@
-### let's give it a try with my exam project on monitoring the reforestation projects in brazil
+### exam project on monitoring the reforestation projects in brazil
 
 setwd("C:/lab/play/refmonitoring/fcover_00-12")
 
