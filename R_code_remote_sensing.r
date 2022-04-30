@@ -105,33 +105,6 @@ plot(l2011$B2_sre, col=clg)
 
 
 ###### day 3 ######
-
-# let's plot only the blue bend
-plot(l2011$B1_sre)
-
-# let's change the colors. plot the blue band using a blue colorRampPalette
-clb <- colorRampPalette(c("dark blue", "blue", "light blue"))(100)
-plot(l2011$B1_sre, col=clb)
-
-# let's multiframe
-par(mfrow=c(2,1)) # the first number is number of rows in the multiframe
-# plot the blue band and the green besides, with different colorRampPalette
-clb <- colorRampPalette(c("dark blue", "blue", "light blue"))(100)
-plot(l2011$B1_sre, col=clb)
-
-clg <- colorRampPalette(c("dark green", "green", "light green"))(100)
-plot(l2011$B1_sre, col=clg)
-
-# so the complete function to plot in multiframe is 
-par(mfrow=c(2,1))
-plot(l2011$B1_sre, col=clb)
-plot(l2011$B1_sre, col=clg)
-
-# now let's change the multiframe in order to have 2 rows the blue on top and the green on bottom
-par(mfrow=c(2,1))
-plot(l2011$B1_sre, col=clb)
-plot(l2011$B1_sre, col=clg)
-
 # exercise: plot the first 4 bends with 2 rows and 2 columns
 # first let's set the color palette for each image
 clb <- colorRampPalette(c("dark blue", "blue", "light blue"))(100)
