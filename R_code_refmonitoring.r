@@ -21,7 +21,9 @@ names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5",
 #plot(FCOVERstack)
 # ext <- (-62, -58, -24, -19)
 # ext <- c(-43, -40, -21, -18)
-ext <- c(-46.5, -44, -20, -17)
+# main ext <- c(-46.5, -44, -20, -17)
+# brigadeiro:
+ext <- c(-43, -42, -21.5, -21)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
 
@@ -275,20 +277,20 @@ FCOVER300stack <- stack(list_rast300)
 #plot(FCOVER300stack)
 
 # ext300 <- c(-46, -45, -19, -18)
-FCOVER300crop <- crop(FCOVER300stack, ext300)
+FCOVER300crop <- crop(FCOVER300stack, ext)
 plot(FCOVER300crop)
 
-names(FCOVER300stack) <- c("FCOVER300.1","FCOVER300.2","FCOVER300.3","FCOVER300.4")
+names(FCOVER300crop) <- c("FCOVER300.1","FCOVER300.2","FCOVER300.3","FCOVER300.4")
 
 FCOVER300_2014 <- FCOVER300crop$FCOVER300.1
 FCOVER300_2016 <- FCOVER300crop$FCOVER300.2
 FCOVER300_2018 <- FCOVER300crop$FCOVER300.3
 FCOVER300_2020 <- FCOVER300crop$FCOVER300.4
 
-FCOVER300_2014_df <- as.data.frame(FCOVER2014, xy=TRUE)
-FCOVER300_2016_df <- as.data.frame(FCOVER2016, xy=TRUE)
-FCOVER300_2018_df <- as.data.frame(FCOVER2018, xy=TRUE)
-FCOVER300_2020_df <- as.data.frame(FCOVER2020, xy=TRUE)
+FCOVER300_2014_df <- as.data.frame(FCOVER300_2014, xy=TRUE)
+FCOVER300_2016_df <- as.data.frame(FCOVER300_2016, xy=TRUE)
+FCOVER300_2018_df <- as.data.frame(FCOVER300_2018, xy=TRUE)
+FCOVER300_2020_df <- as.data.frame(FCOVER300_2020, xy=TRUE)
 
 g300.1 <- ggplot() + geom_raster(FCOVER300_2014_df, mapping = aes(x=x, y=y, fill=FCOVER300.1)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2014") + labs(fill = "FCOVER")
 g300.2 <- ggplot() + geom_raster(FCOVER300_2016_df, mapping = aes(x=x, y=y, fill=FCOVER300.2)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2016") + labs(fill = "FCOVER")
@@ -361,4 +363,27 @@ SWIstack <- stack(SWIrast)
 # ext
 SWIcrop <- crop(SWIstack, ext)
 plot(SWIcrop)
+
+
+
+
+
+
+
+
+
+setwd("C:/lab/play")
+l2013 <- list.files(pattern="20130730")
+r2013 <- lapply(l2013, raster)
+s2013 <- stack(r2013)
+plotRGB(s2013, r=3, g=2, b=1, stretch="Lin")
+
+l2021 <- list.files(pattern="20210704")
+r2021 <- lapply(l2021, raster)
+s2021 <- stack(r2021)
+plotRGB(s2021, r=3, r=2, b=1, stretch="Lin")
+
+par(mfrow=c(1, 2))
+plotRGB(s2013, r=3, g=2, b=1, stretch="Lin")
+plotRGB(s2021, r=3, r=2, b=1, stretch="Lin")
                 
