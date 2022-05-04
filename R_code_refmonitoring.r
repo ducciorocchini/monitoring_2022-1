@@ -17,13 +17,13 @@ list_rast <- lapply(rlist, raster)
 FCOVERstack <- stack(list_rast)
 #plot(FCOVERstack)
 
-names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5", "FCOVER.6")
+names(FCOVERstack) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5")
 #plot(FCOVERstack)
 # ext <- (-62, -58, -24, -19)
 # ext <- c(-43, -40, -21, -18)
 # main ext <- c(-46.5, -44, -20, -17)
 # brigadeiro:
-ext <- c(-43, -42, -21.5, -21)
+ext <- c(-52, -32, -20, -4)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
 
@@ -33,33 +33,31 @@ plot(FCOVERcrop)
 dev.off()
 
 
-FCOVER2000 <- FCOVERcrop$FCOVER.1
-FCOVER2004 <- FCOVERcrop$FCOVER.2
-FCOVER2008 <- FCOVERcrop$FCOVER.3
-FCOVER2012 <- FCOVERcrop$FCOVER.4
-FCOVER2016 <- FCOVERcrop$FCOVER.5
-FCOVER2020 <- FCOVERcrop$FCOVER.6
+FCOVER2012 <- FCOVERcrop$FCOVER.1
+FCOVER2014 <- FCOVERcrop$FCOVER.2
+FCOVER2016 <- FCOVERcrop$FCOVER.3
+FCOVER2018 <- FCOVERcrop$FCOVER.4
+FCOVER2020 <- FCOVERcrop$FCOVER.5
 
-FCOVER2000_df <- as.data.frame(FCOVER2000, xy=TRUE)
-FCOVER2004_df <- as.data.frame(FCOVER2004, xy=TRUE)
-FCOVER2008_df <- as.data.frame(FCOVER2008, xy=TRUE)
+
 FCOVER2012_df <- as.data.frame(FCOVER2012, xy=TRUE)
+FCOVER2014_df <- as.data.frame(FCOVER2014, xy=TRUE)
 FCOVER2016_df <- as.data.frame(FCOVER2016, xy=TRUE)
+FCOVER2018_df <- as.data.frame(FCOVER2018, xy=TRUE)
 FCOVER2020_df <- as.data.frame(FCOVER2020, xy=TRUE)
 
-g1 <- ggplot() + geom_raster(FCOVER2000_df, mapping = aes(x=x, y=y, fill=FCOVER.1)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2000") + labs(fill = "FCOVER")
-g2 <- ggplot() + geom_raster(FCOVER2004_df, mapping = aes(x=x, y=y, fill=FCOVER.2)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2004") + labs(fill = "FCOVER")
-g3 <- ggplot() + geom_raster(FCOVER2008_df, mapping = aes(x=x, y=y, fill=FCOVER.3)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2008") + labs(fill = "FCOVER")
-g4 <- ggplot() + geom_raster(FCOVER2012_df, mapping = aes(x=x, y=y, fill=FCOVER.4)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2012") + labs(fill = "FCOVER")
-g5 <- ggplot() + geom_raster(FCOVER2016_df, mapping = aes(x=x, y=y, fill=FCOVER.5)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2016") + labs(fill = "FCOVER")
-g6 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.6)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
+g1 <- ggplot() + geom_raster(FCOVER2012_df, mapping = aes(x=x, y=y, fill=FCOVER.1)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2012") + labs(fill = "FCOVER")
+g2 <- ggplot() + geom_raster(FCOVER2014_df, mapping = aes(x=x, y=y, fill=FCOVER.2)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2014") + labs(fill = "FCOVER")
+g3 <- ggplot() + geom_raster(FCOVER2016_df, mapping = aes(x=x, y=y, fill=FCOVER.3)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2016") + labs(fill = "FCOVER")
+g4 <- ggplot() + geom_raster(FCOVER2018_df, mapping = aes(x=x, y=y, fill=FCOVER.4)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2018") + labs(fill = "FCOVER")
+g5 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.6)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
 
-grid.arrange(g1, g2, g3, g4, g5, g6, nrow=3)
+grid.arrange(g1, g2, g3, g4, g5, nrow=3)
 #or through patchwork package g2 + g1 + g3 / g4 
 
 # export
 png("outputs/fcover_ggplot.png", res=300, width = 3000, height= 3000)
-grid.arrange(g1, g2, g3, g4, g5, g6, nrow=3)
+grid.arrange(g1, g2, g3, g4, g5, nrow=3)
 dev.off()
 
 # plot with real colors
@@ -68,21 +66,19 @@ plot(FCOVERcrop, col = cl)
 
 # plot FCOVER for each year
 par(mfrow = c(2,3))
-plot(FCOVER2000, main = "Forest cover in 2000", col = cl)
-plot(FCOVER2004, main = "Forest cover in 2004", col = cl)
-plot(FCOVER2008, main = "Forest cover in 2008", col = cl)
 plot(FCOVER2012, main = "Forest cover in 2012", col = cl)
+plot(FCOVER2014, main = "Forest cover in 2014", col = cl)
 plot(FCOVER2016, main = "Forest cover in 2016", col = cl)
+plot(FCOVER2018, main = "Forest cover in 2018", col = cl)
 plot(FCOVER2020, main = "Forest cover in 2020", col = cl)
 
 # export
 png("outputs/fcover_plot_real.png", res= 300, width=3000, height=3000)
 par(mfrow = c(2,3))
-plot(FCOVER2000, main = "Forest cover in 2000", col = cl)
-plot(FCOVER2004, main = "Forest cover in 2004", col = cl)
-plot(FCOVER2008, main = "Forest cover in 2008", col = cl)
 plot(FCOVER2012, main = "Forest cover in 2012", col = cl)
+plot(FCOVER2014, main = "Forest cover in 2014", col = cl)
 plot(FCOVER2016, main = "Forest cover in 2016", col = cl)
+plot(FCOVER2018, main = "Forest cover in 2018", col = cl)
 plot(FCOVER2020, main = "Forest cover in 2020", col = cl)
 dev.off()
 
