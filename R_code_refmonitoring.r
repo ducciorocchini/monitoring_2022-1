@@ -310,10 +310,18 @@ plot(NDVIcrop)
 
 names(NDVIstack) <- c("NDVI2014","NDVI2016","NDVI2018","NDVI2020")
 
-plotRGB(NDVIcrop, r=NDVI2014, g=NDVI2018, b=NDVI2020, stretch="Lin")
+plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
 
 
+par(mfrow=c(2,2))
+plotRGB(NDVIcrop, r=, g=, b=1, stretch="Lin")
+plotRGB(NDVIcrop, r=3, g=1, b=2, stretch="Lin")
+plotRGB(NDVIcrop, r=1, g=2, b=3, stretch="Lin")
+plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
 
+
+NDVIdif <- NDVI2014 - NDVI2020
+plot(NDVIdif, col=cld)
 
 
 
