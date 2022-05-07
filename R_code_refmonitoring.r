@@ -177,34 +177,26 @@ FCOVER300stack <- stack(list_rast300)
 #plot(FCOVER300stack)
 
 ext300 <- c(-46, -39, -18, -6)
-FCOVER300crop <- crop(FCOVER300stack, ext)
+FCOVER300crop <- crop(FCOVER300stack, ext300)
 plot(FCOVER300crop)
 
-names(FCOVER300crop) <- c("FCOVER300.1","FCOVER300.2","FCOVER300.3","FCOVER300.4")
+names(FCOVER300crop) <- c("FCOVER300.1","FCOVER300.2")
 
 FCOVER300_2014 <- FCOVER300crop$FCOVER300.1
-FCOVER300_2016 <- FCOVER300crop$FCOVER300.2
-FCOVER300_2018 <- FCOVER300crop$FCOVER300.3
-FCOVER300_2020 <- FCOVER300crop$FCOVER300.4
+FCOVER300_2020 <- FCOVER300crop$FCOVER300.2
 
 
 FCOVER300_2014_df <- as.data.frame(FCOVER300_2014, xy=TRUE)
-FCOVER300_2016_df <- as.data.frame(FCOVER300_2016, xy=TRUE)
-FCOVER300_2018_df <- as.data.frame(FCOVER300_2018, xy=TRUE)
 FCOVER300_2020_df <- as.data.frame(FCOVER300_2020, xy=TRUE)
 
 g300.1 <- ggplot() + geom_raster(FCOVER300_2014_df, mapping = aes(x=x, y=y, fill=FCOVER300.1)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2014") + labs(fill = "FCOVER")
-g300.2 <- ggplot() + geom_raster(FCOVER300_2016_df, mapping = aes(x=x, y=y, fill=FCOVER300.2)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2016") + labs(fill = "FCOVER")
-g300.3 <- ggplot() + geom_raster(FCOVER300_2018_df, mapping = aes(x=x, y=y, fill=FCOVER300.3)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2018") + labs(fill = "FCOVER")
-g300.4 <- ggplot() + geom_raster(FCOVER300_2020_df, mapping = aes(x=x, y=y, fill=FCOVER300.4)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
+g300.2 <- ggplot() + geom_raster(FCOVER300_2020_df, mapping = aes(x=x, y=y, fill=FCOVER300.2)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
 
-grid.arrange(g300.1, g300.2, g300.3, g300.4, nrow=2)
+grid.arrange(g300.1, g300.2, nrow=1)
 
 
 par(mfrow = c(2,2))
 plot(FCOVER300_2014, main = "Forest cover in 2014", col = clg)
-plot(FCOVER300_2016, main = "Forest cover in 2016", col = clg)
-plot(FCOVER300_2018, main = "Forest cover in 2018", col = clg)
 plot(FCOVER300_2020, main = "Forest cover in 2020", col = clg)
 
 
@@ -212,7 +204,7 @@ pairs(FCOVER300crop)
 
 
 dif300 <- FCOVER300_2014 - FCOVER300_2020
-plot(dif300, col=cl1, main="Difference between FCOVER in 2014 and 2022")
+plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
 
 
 
@@ -223,53 +215,38 @@ LAIlist <- list.files(pattern = "LAI")
 LAIrast <- lapply(LAIlist, raster)
 LAIstack <- stack(LAIrast)
 
-names(LAIstack) <- c("LAI.1", "LAI.2", "LAI.3", "LAI.4", "LAI.5", "LAI.6")
-
 LAIcrop <- crop(LAIstack, ext)
 plot(LAIcrop)
 LAIcl <- colorRampPalette(c("red", "light blue", "yellow"))(100)
 plot(LAIcrop, col=LAIcl)
 
-png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
-plot(LAIcrop, col=LAIcl)
-dev.off()
+names(LAIcrop) <- c("LAI.1", "LAI.2")
+LAI_2014 <- LAIcrop$LAI.1
+LAI_2020 <- LAIcrop$LAI.2
 
 
-LAI2000 <- LAIcrop$LAI.1
-LAI2004 <- LAIcrop$LAI.2
-LAI2008 <- LAIcrop$LAI.3
-LAI2012 <- LAIcrop$LAI.4
-LAI2016 <- LAIcrop$LAI.5
-LAI2020 <- LAIcrop$LAI.6
+LAI_2014_df <- as.data.frame(LAI_2014, xy=TRUE)
+LAI_2020_df <- as.data.frame(LAI2020, xy=TRUE)
 
-LAI2000_df <- as.data.frame(LAI2000, xy=TRUE)
-LAI2004_df <- as.data.frame(LAI2004, xy=TRUE)
-LAI2008_df <- as.data.frame(LAI2008, xy=TRUE)
-LAI2012_df <- as.data.frame(LAI2012, xy=TRUE)
-LAI2016_df <- as.data.frame(LAI2016, xy=TRUE)
-LAI2020_df <- as.data.frame(LAI2020, xy=TRUE)
+LAIg1 <- ggplot() + geom_raster(LAI_2014_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2014") + labs(fill = "LAI")
+LAIg2 <- ggplot() + geom_raster(LAI_2020_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
 
-LAIg1 <- ggplot() + geom_raster(LAI2000_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
-LAIg2 <- ggplot() + geom_raster(LAI2004_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2004") + labs(fill = "LAI")
-LAIg3 <- ggplot() + geom_raster(LAI2008_df, mapping = aes(x=x, y=y, fill=LAI.3)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2008") + labs(fill = "LAI")
-LAIg4 <- ggplot() + geom_raster(LAI2012_df, mapping = aes(x=x, y=y, fill=LAI.4)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2012") + labs(fill = "LAI")
-LAIg5 <- ggplot() + geom_raster(LAI2016_df, mapping = aes(x=x, y=y, fill=LAI.5)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2016") + labs(fill = "LAI")
-LAIg6 <- ggplot() + geom_raster(LAI2020_df, mapping = aes(x=x, y=y, fill=LAI.6)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
-
-LAIg1 + LAIg2 + LAIg3 + LAIg4 + LAIg5 + LAIg6
+LAIg1 + LAIg2 
 
 #export
 png("outputs/LAI_ggplot.png", res=300, width=3000, height=3000)
-LAIg1 + LAIg2 + LAIg3 + LAIg4 + LAIg5 + LAIg6
+LAIg1 + LAIg2
 dev.off()
 
-#plot with cl palette
-plot(LAIcrop, col=cl)
+par(mfrow= c(2,2))
+plot(LAI_2014, col=LAIcl, main = "Leaf Area Index in 2014")
+plot(LAI_2020, col=LAIcl, main = "Leaf Area Index in 2020")
 
-#export
-png("outputs/LAI_plot_real.png", res=300, width=3000, height=3000)
-plot(LAIcrop, col=cl)
+png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
+plot(LAI_2014, col=LAIcl, main = "Leaf Area Index in 2014")
+plot(LAI_2020, col=LAIcl, main = "Leaf Area Index in 2020")
 dev.off()
+
 
 
 LAIdif <- LAI2000 - LAI2020
@@ -308,32 +285,46 @@ NDVIstack <- stack(NDVIrast)
 NDVIcrop <- crop(NDVIstack, ext)
 plot(NDVIcrop)
 
-names(NDVIstack) <- c("NDVI2014","NDVI2016","NDVI2018","NDVI2020")
+names(NDVIstack) <- c("NDVI2014", "NDVI2016", "NDVI2018","NDVI2020")
 
 plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
 
 
-par(mfrow=c(2,2))
-plotRGB(NDVIcrop, r=, g=, b=1, stretch="Lin")
-plotRGB(NDVIcrop, r=3, g=1, b=2, stretch="Lin")
-plotRGB(NDVIcrop, r=1, g=2, b=3, stretch="Lin")
-plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
+NDVI2014 <- NDVIcrop$NDVI.1
+NDVI2020 <- NDVIcrop$NDVI.2
 
+NDVI2014_df <- as.data.frame(LAI2014, xy=TRUE)
+NDVI2020_df <- as.data.frame(LAI2020, xy=TRUE)
+
+NDVIg1 <- ggplot() + geom_raster(LAI2014_df, mapping = aes(x=x, y=y, fill=NDVI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2014") + labs(fill = "LAI")
+NDVIg2 <- ggplot() + geom_raster(LAI2020_df, mapping = aes(x=x, y=y, fill=NDVI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
+
+NDVIg1 + NDVIg2 
 
 NDVIdif <- NDVI2014 - NDVI2020
 plot(NDVIdif, col=cld)
 
 
 
-DMPlist <- list.files(pattern="DMP")
-DMPrast <- lapply(DMPlist, raster)
-DMPstack <- stack(DMPrast)
 
-# plot(NDVIstack)
 
-# ext
-DMPcrop <- crop(DMPstack, ext)
-plot(DMPcrop)
+
+par(mfrow=c(4, 2))
+plot(FCOVER300_2014, main = "Forest cover in 2014", col = clg)
+plot(FCOVER300_2020, main = "Forest cover in 2020", col = clg)
+plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
+
+
+
+
+### CO2 lett's try
+CO2_2014 <- raster("odiac2020b_1km_excl_intl_1401.tif.gz")
+
+
+
+
+
+
 
 
 
