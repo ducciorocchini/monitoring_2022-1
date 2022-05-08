@@ -170,6 +170,10 @@ png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
 plot(dif, col=cl1, main="difference between fcover of 2012 and 2020")
 dev.off()
 
+
+
+
+
 # having seen the area with the highest difference let's use the 300m resolution to focus there
 rlist300 <- list.files(pattern = "FCOVER300")
 list_rast300 <- lapply(rlist300, raster)
@@ -211,7 +215,7 @@ plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
 
 ## leaf area index
 
-LAIlist <- list.files(pattern = "LAI")
+LAIlist <- list.files(pattern = "LAI-RT6")
 LAIrast <- lapply(LAIlist, raster)
 LAIstack <- stack(LAIrast)
 
