@@ -15,7 +15,7 @@ rlist <- list.files(pattern = "c_gls_FCOVER_")
 list_rast <- lapply(rlist, raster)
 
 FCOVERstack <- stack(list_rast)
-plot(FCOVERstack)
+# plot(FCOVERstack)
 
 #let's crop on brazil atlantic forest
 ext <- c(-52, -32, -20, -4)
@@ -106,36 +106,26 @@ abline(0,1, col="red")
 
 # export
 png("outputs/fcover_regressionmod.png", res = 300, width = 3000, height = 3000)
-par(mfrow=c(4,4))
-plot(FCOVER2000, FCOVER2004, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2004")
+par(mfrow=c(3,4))
+plot(FCOVER2012, FCOVER2014, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2012", ylab="FCOVER 2014")
 abline(0,1, col="red")
-plot(FCOVER2000, FCOVER2008, xlim = c(0,1), ylim= c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2008")
+plot(FCOVER2012, FCOVER2016, xlim = c(0,1), ylim= c(0, 1), xlab = "FCOVER 2012", ylab="FCOVER 2016")
 abline(0,1, col="red")
-plot(FCOVER2000, FCOVER2012, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2012")
-abline(0,1, col="red")
-plot(FCOVER2000, FCOVER2016, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2016")
-abline(0,1, col="red")
-plot(FCOVER2000, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020")
-abline(0,1, col="red")
-plot(FCOVER2004, FCOVER2008, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2004", ylab="FCOVER 2008")
-abline(0,1, col="red")
-plot(FCOVER2004, FCOVER2012, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2004", ylab="FCOVER 2012")
-abline(0,1, col="red")
-plot(FCOVER2004, FCOVER2016, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2004", ylab="FCOVER 2016")
-abline(0,1, col="red")
-plot(FCOVER2004, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2004", ylab="FCOVER 2020")
-abline(0,1, col="red")
-plot(FCOVER2008, FCOVER2012, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2008", ylab="FCOVER 2012")
-abline(0,1, col="red")
-plot(FCOVER2008, FCOVER2016, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2008", ylab="FCOVER 2012")
-abline(0,1, col="red")
-plot(FCOVER2008, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2008", ylab="FCOVER 2012")
-abline(0,1, col="red")
-plot(FCOVER2012, FCOVER2016, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2012", ylab="FCOVER 2016")
+plot(FCOVER2012, FCOVER2018, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2012", ylab="FCOVER 2018")
 abline(0,1, col="red")
 plot(FCOVER2012, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2012", ylab="FCOVER 2020")
 abline(0,1, col="red")
+plot(FCOVER2014, FCOVER2016, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2014", ylab="FCOVER 2016")
+abline(0,1, col="red")
+plot(FCOVER2014, FCOVER2018, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2014", ylab="FCOVER 2018")
+abline(0,1, col="red")
+plot(FCOVER2014, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2014", ylab="FCOVER 2020")
+abline(0,1, col="red")
+plot(FCOVER2016, FCOVER2018, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2016", ylab="FCOVER 2018")
+abline(0,1, col="red")
 plot(FCOVER2016, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2016", ylab="FCOVER 2020")
+abline(0,1, col="red")
+plot(FCOVER2018, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2018", ylab="FCOVER 2020")
 abline(0,1, col="red")
 dev.off()
 
@@ -162,16 +152,13 @@ dev.off()
 
 # plot difference between 2000 and 2020
 dif <- FCOVER2012 - FCOVER2020
-cld <- brewer.pal(n=9, name="Set1")
+cld <- brewer.pal(n=11, name="PiYG")
 plot(dif, col=cld, main="difference between fcover of 2012 and 2020")
 
 # export
 png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
-plot(dif, col=cl1, main="difference between fcover of 2012 and 2020")
+plot(dif, col=cld, main="difference between fcover of 2012 and 2020")
 dev.off()
-
-
-
 
 
 # having seen the area with the highest difference let's use the 300m resolution to focus there
@@ -182,12 +169,17 @@ FCOVER300stack <- stack(list_rast300)
 
 ext300 <- c(-46, -39, -18, -6)
 FCOVER300crop <- crop(FCOVER300stack, ext300)
-plot(FCOVER300crop)
+plot(FCOVER300crop, main="FCOVER_300res", col=clg)
 
 names(FCOVER300crop) <- c("FCOVER300.1","FCOVER300.2")
-
 FCOVER300_2014 <- FCOVER300crop$FCOVER300.1
 FCOVER300_2020 <- FCOVER300crop$FCOVER300.2
+
+png("outputs/fcover300m_crop.png", res=300, width=3000, height=3000)
+par(mfrow=c(1, 2))
+plot(FCOVER300_2014, main="FCOVER300_2014", col=clg)
+plot(FCOVER300_2020, main="FCOVER300_2020", col=clg)
+dev.off()
 
 
 FCOVER300_2014_df <- as.data.frame(FCOVER300_2014, xy=TRUE)
@@ -198,18 +190,22 @@ g300.2 <- ggplot() + geom_raster(FCOVER300_2020_df, mapping = aes(x=x, y=y, fill
 
 grid.arrange(g300.1, g300.2, nrow=1)
 
-
-par(mfrow = c(2,2))
-plot(FCOVER300_2014, main = "Forest cover in 2014", col = clg)
-plot(FCOVER300_2020, main = "Forest cover in 2020", col = clg)
-
+png("outputs/fcover300m_ggplot.png", res=300, width=4000, height=3000)
+grid.arrange(g300.1, g300.2, nrow=1)
+dev.off()
 
 pairs(FCOVER300crop)
 
+png("outputs/fcover300_pairs.png", res=300, width=3000, height=3000)
+pairs(FCOVER300crop)
+dev.off()
 
 dif300 <- FCOVER300_2014 - FCOVER300_2020
-plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
+plot(dif300, col=cld, main="Difference between FCOVER300m in 2014 and 2020")
 
+png("outputs/fcover300m_dif.png", res=300, width=3000, height=3000)
+plot(dif300, col=cld, main="Difference between FCOVER300m in 2014 and 2020")
+dev.off()
 
 
 
@@ -220,17 +216,22 @@ LAIrast <- lapply(LAIlist, raster)
 LAIstack <- stack(LAIrast)
 
 LAIcrop <- crop(LAIstack, ext)
-plot(LAIcrop)
-LAIcl <- colorRampPalette(c("red", "light blue", "yellow"))(100)
-plot(LAIcrop, col=LAIcl)
+ck <- brewer.pal(n=9, name="GnBu")
+plot(LAIcrop, col=ck)
 
 names(LAIcrop) <- c("LAI.1", "LAI.2")
 LAI_2014 <- LAIcrop$LAI.1
 LAI_2020 <- LAIcrop$LAI.2
 
+png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
+par(mfrow=c(1, 2))
+plot(LAI_2014, col=ck, main = "Leaf Area Index in 2014")
+plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
+dev.off()
+
 
 LAI_2014_df <- as.data.frame(LAI_2014, xy=TRUE)
-LAI_2020_df <- as.data.frame(LAI2020, xy=TRUE)
+LAI_2020_df <- as.data.frame(LAI_2020, xy=TRUE)
 
 LAIg1 <- ggplot() + geom_raster(LAI_2014_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2014") + labs(fill = "LAI")
 LAIg2 <- ggplot() + geom_raster(LAI_2020_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
@@ -238,42 +239,24 @@ LAIg2 <- ggplot() + geom_raster(LAI_2020_df, mapping = aes(x=x, y=y, fill=LAI.2)
 LAIg1 + LAIg2 
 
 #export
-png("outputs/LAI_ggplot.png", res=300, width=3000, height=3000)
+png("outputs/LAI_ggplot.png", res=250, width=6000, height=3000)
 LAIg1 + LAIg2
 dev.off()
 
-par(mfrow= c(2,2))
-plot(LAI_2014, col=LAIcl, main = "Leaf Area Index in 2014")
-plot(LAI_2020, col=LAIcl, main = "Leaf Area Index in 2020")
-
-png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
-plot(LAI_2014, col=LAIcl, main = "Leaf Area Index in 2014")
-plot(LAI_2020, col=LAIcl, main = "Leaf Area Index in 2020")
-dev.off()
-
-
-
-LAIdif <- LAI2000 - LAI2020
-cl1 <- colorRampPalette(colors = c("#ca0020", "#f4a582", "#636363", "#a6dba0", "#008837"))(100)
-plot(LAIdif, col=cl1, main="difference between Leaf Area Index of 2000 and 2020")
-
+LAIdif <- LAI_2014 - LAI_2020
+ckj <- brewer.pal(n=11, name="RdYlBu")
+plot(LAIdif, col=ckj)
+    
 # export
 png("outputs/LAI_dif.png", res = 300, width = 3000, height = 3000)
-plot(LAIdif, col=cl1, main="difference between Leaf Area Index of 2000 and 2020")
+plot(LAIdif, main= "Differences in Leaf Area Index between 2014 and 2020", col=ckj)
 dev.off()
-
 
 pairs(LAIcrop)
 
 png("outputs/LAI_pairs.png", res=300, width=3000, height=3000)
 pairs(LAIcrop)
 dev.off()
-
-
-
-
-
-
 
 
 
@@ -289,19 +272,27 @@ NDVIstack <- stack(NDVIrast)
 NDVIcrop <- crop(NDVIstack, ext)
 plot(NDVIcrop)
 
-names(NDVIstack) <- c("NDVI2014", "NDVI2016", "NDVI2018","NDVI2020")
+names(NDVIcrop) <- c("NDVI.1", "NDVI.2")
+NDVI2014 <- NDVIcrop$NDVI.1
+NDVI2017 <- NDVIcrop$NDVI.2
+NDVI2020 <- NDVIcrop$NDVI.3
+
+cln <- brewer.pal(n=11, name="RdYlGn")
+par(mfrow=c(1,2))
+plot(NDVI2014_def, main="NDVI in 2014", col=cln)
+plot(NDVI2020_def, main="NDVI in 2020", col=cln)
+
+click(NDVI2014)
+NDVI2014_def <- calc(NDVI2014, fun=function(x){x[x>0.936] <- NA;return(x)})
+NDVI2020_dev <- calc(NDVI2020, fun=function(x){x[x>0.936] <- NA;return(x)})
 
 plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
 
+NDVI2014_df <- as.data.frame(NDVI2014, xy=TRUE)
+NDVI2020_df <- as.data.frame(NDVI2020, xy=TRUE)
 
-NDVI2014 <- NDVIcrop$NDVI.1
-NDVI2020 <- NDVIcrop$NDVI.2
-
-NDVI2014_df <- as.data.frame(LAI2014, xy=TRUE)
-NDVI2020_df <- as.data.frame(LAI2020, xy=TRUE)
-
-NDVIg1 <- ggplot() + geom_raster(LAI2014_df, mapping = aes(x=x, y=y, fill=NDVI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2014") + labs(fill = "LAI")
-NDVIg2 <- ggplot() + geom_raster(LAI2020_df, mapping = aes(x=x, y=y, fill=NDVI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
+NDVIg1 <- ggplot() + geom_raster(NDVI2014_df, mapping = aes(x=x, y=y, fill=NDVI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2014") + labs(fill = "LAI")
+NDVIg2 <- ggplot() + geom_raster(NDVI2020_df, mapping = aes(x=x, y=y, fill=NDVI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
 
 NDVIg1 + NDVIg2 
 
