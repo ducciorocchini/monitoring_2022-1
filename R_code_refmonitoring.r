@@ -10,6 +10,7 @@ library(patchwork) # for comparing separate ggplots, building a multiframe
 library(gridExtra) # for grid.arrange plotting, creating a multiframe  
 library(rgdal) # to open shape file 
 library(RColorBrewer)
+library(RStoolbox)
 
 rlist <- list.files(pattern = "c_gls_FCOVER_")
 list_rast <- lapply(rlist, raster)
@@ -317,8 +318,59 @@ plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
 
 
 
+Fclass2012 <- unsuperClass(FCOVER2012, nClasses=2)
+Fclass2014 <- unsuperClass(FCOVER2014, nClasses=2)
+Fclass2016 <- unsuperClass(FCOVER2016, nClasses=2)
+Fclass2018 <- unsuperClass(FCOVER2018, nCLasses=2)
+Fclass2020 <- unsuperClass(FCOVER2020, nClasses=2)
 
+par(mfrow=c(3,2))
+plot(Fclass2012$map)
+plot(Fclass2014$map)
+plot(Fclass2016$map)
+plot(Fclass2018$map)
+plot(Fclass2020$map)
 
+freq(Fclass2012$map)
+#     value   count
+#[1,]     1 1515370
+#[2,]     2 1392674
+total <- 1515370 + 1392674
+plow12 <- 1515370/total
+plow12
+phigh12 <- 1392674/total
+phigh12
+
+cover <- c("high", "low")
+prop12 <- c(1392674, 1515370)
+proportion12 <- data.frame(cover, prop12)
+
+freq(Fclass2014$map)
+#[1,]     1 1431420
+#[2,]     2 1476624
+plow14 <- 1431420/total
+plow14
+phigh14 <- 1476624/total
+phigh14
+
+freq(Fclass2016$map)
+#[1,]     1 1344844
+#[2,]     2 1563200
+plow16 <- 1344844/total
+plow16
+phigh16 <- 1563200/total
+phigh16
+
+freq(Fclass2018$map)
+#bo
+
+freq(Fclass2020$map)
+#[1,]     1 1126775
+#[2,]     2 1781269
+plow20 <- 1126775/total
+phigh20
+phigh20 <- 1781269/total
+phigh20
 
 
 
