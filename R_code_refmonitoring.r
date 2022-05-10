@@ -274,8 +274,8 @@ plot(NDVIcrop)
 
 names(NDVIcrop) <- c("NDVI.1", "NDVI.2")
 NDVI2014 <- NDVIcrop$NDVI.1
-NDVI2017 <- NDVIcrop$NDVI.2
-NDVI2020 <- NDVIcrop$NDVI.3
+NDVI2020 <- NDVIcrop$NDVI.2
+#NDVI2020 <- NDVIcrop$NDVI.3
 
 cln <- brewer.pal(n=11, name="RdYlGn")
 par(mfrow=c(1,2))
@@ -284,7 +284,7 @@ plot(NDVI2020_def, main="NDVI in 2020", col=cln)
 
 click(NDVI2014)
 NDVI2014_def <- calc(NDVI2014, fun=function(x){x[x>0.936] <- NA;return(x)})
-NDVI2020_dev <- calc(NDVI2020, fun=function(x){x[x>0.936] <- NA;return(x)})
+NDVI2020_def <- calc(NDVI2020, fun=function(x){x[x>0.936] <- NA;return(x)})
 
 plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
 
@@ -312,8 +312,6 @@ plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
 
 
 
-### CO2 lett's try
-CO2_2014 <- raster("odiac2020b_1km_excl_intl_1401.tif.gz")
 
 
 
