@@ -273,31 +273,24 @@ NDVIstack <- stack(NDVIrast)
 NDVIcrop <- crop(NDVIstack, ext)
 plot(NDVIcrop)
 
+# plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
+
 names(NDVIcrop) <- c("NDVI.1", "NDVI.2")
 NDVI2014 <- NDVIcrop$NDVI.1
 NDVI2020 <- NDVIcrop$NDVI.2
 #NDVI2020 <- NDVIcrop$NDVI.3
+
+#click(NDVI2014)
+NDVI2014_def <- calc(NDVI2014, fun=function(x){x[x>0.935] <- NA;return(x)})
+NDVI2020_def <- calc(NDVI2020, fun=function(x){x[x>0.935] <- NA;return(x)})
 
 cln <- brewer.pal(n=11, name="RdYlGn")
 par(mfrow=c(1,2))
 plot(NDVI2014_def, main="NDVI in 2014", col=cln)
 plot(NDVI2020_def, main="NDVI in 2020", col=cln)
 
-click(NDVI2014)
-NDVI2014_def <- calc(NDVI2014, fun=function(x){x[x>0.936] <- NA;return(x)})
-NDVI2020_def <- calc(NDVI2020, fun=function(x){x[x>0.936] <- NA;return(x)})
 
-plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
-
-NDVI2014_df <- as.data.frame(NDVI2014, xy=TRUE)
-NDVI2020_df <- as.data.frame(NDVI2020, xy=TRUE)
-
-NDVIg1 <- ggplot() + geom_raster(NDVI2014_df, mapping = aes(x=x, y=y, fill=NDVI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2014") + labs(fill = "LAI")
-NDVIg2 <- ggplot() + geom_raster(NDVI2020_df, mapping = aes(x=x, y=y, fill=NDVI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
-
-NDVIg1 + NDVIg2 
-
-NDVIdif <- NDVI2014 - NDVI2020
+NDVIdif <- NDVI2014_def - NDVI2020_def
 plot(NDVIdif, col=cld)
 
 
@@ -305,13 +298,22 @@ plot(NDVIdif, col=cld)
 
 
 
-par(mfrow=c(4, 2))
-plot(FCOVER300_2014, main = "Forest cover in 2014", col = clg)
-plot(FCOVER300_2020, main = "Forest cover in 2020", col = clg)
-plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
+par(mfrow=c(3, 3))
+plot(FCOVER2014, main = "Forest cover in 2014", col = clg)
+plot(FCOVER2020, main = "Forest cover in 2020", col = clg)
+plot(dif, col=cld, main="difference between fcover of 2012 and 2020")
+plot(LAI_2014, col=ck, main = "Leaf Area Index in 2014")
+plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
+plot(LAIdif, col=ckj)
+plot(NDVI2014_def, main="NDVI in 2014", col=cln)
+plot(NDVI2020_def, main="NDVI in 2020", col=cln)
+plot(NDVIdif, col=cld)
 
 
 
+Fclass2018 <- unsuperClass(FCOVER2018, nClasses=2, values=2)
+plot(Fclass2018$map)
+Fclass2018
 
 
 
@@ -321,7 +323,7 @@ plot(dif300, col=cl1, main="Difference between FCOVER300m in 2014 and 2022")
 Fclass2012 <- unsuperClass(FCOVER2012, nClasses=2)
 Fclass2014 <- unsuperClass(FCOVER2014, nClasses=2)
 Fclass2016 <- unsuperClass(FCOVER2016, nClasses=2)
-Fclass2018 <- unsuperClass(FCOVER2018, nCLasses=2)
+Fclass2018 <- unsuperClass(FCOVER2018, nClasses=2, values=2)
 Fclass2020 <- unsuperClass(FCOVER2020, nClasses=2)
 
 par(mfrow=c(3,2))
@@ -331,48 +333,51 @@ plot(Fclass2016$map)
 plot(Fclass2018$map)
 plot(Fclass2020$map)
 
+png("outputs/unsuperclassFCOVER.png", res=300, width=3000, height=3000)
+par(mfrow=c(3,2))
+plot(Fclass2012$map)
+plot(Fclass2014$map)
+plot(Fclass2016$map)
+plot(Fclass2018$map)
+plot(Fclass2020$map)
+dev.off()
+
+
 freq(Fclass2012$map)
 #     value   count
-#[1,]     1 1515370
-#[2,]     2 1392674
+#[1,]     1 1515370 high
+#[2,]     2 1392674 low
 total <- 1515370 + 1392674
-plow12 <- 1515370/total
-plow12
-phigh12 <- 1392674/total
+phigh12 <- 1515370/total
 phigh12
 
-cover <- c("high", "low")
-prop12 <- c(1392674, 1515370)
-proportion12 <- data.frame(cover, prop12)
-
 freq(Fclass2014$map)
-#[1,]     1 1431420
-#[2,]     2 1476624
-plow14 <- 1431420/total
-plow14
+#[1,]     1 1431420 low
+#[2,]     2 1476624 high
 phigh14 <- 1476624/total
 phigh14
 
 freq(Fclass2016$map)
-#[1,]     1 1344844
-#[2,]     2 1563200
-plow16 <- 1344844/total
-plow16
-phigh16 <- 1563200/total
+#[1,]     1 1344844 high
+#[2,]     2 1563200 low
+phigh16 <- 1344844/total
 phigh16
 
 freq(Fclass2018$map)
-#bo
+#[1,]     1 1697354 high
+#[2,]     2 1210690
+phigh18 <- 1697354/total
+phigh18
 
 freq(Fclass2020$map)
 #[1,]     1 1126775
-#[2,]     2 1781269
-plow20 <- 1126775/total
-phigh20
+#[2,]     2 1781269 high
 phigh20 <- 1781269/total
 phigh20
 
-
+high_cover_prop <- c(phigh12, phigh14, phigh16, phigh18, phigh20)
+year <- c(2012, 2014, 2016, 2018, 2020)
+dat <- data.frame(year, high_cover_prop)
 
 
 
