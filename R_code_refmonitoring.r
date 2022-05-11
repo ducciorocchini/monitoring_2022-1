@@ -378,18 +378,10 @@ phigh20
 high_cover_prop <- c(phigh12, phigh14, phigh16, phigh18, phigh20)
 year <- c(2012, 2014, 2016, 2018, 2020)
 dat <- data.frame(year, high_cover_prop)
+model <- lm(year~high_cover_prop)
+plot(high_cover_prop ~ year)
+cor.test(high_cover_prop, year)
 
-
-
-SWIlist <- list.files(pattern="SWI")
-SWIrast <- lapply(SWIlist, raster)
-SWIstack <- stack(SWIrast)
-
-# plot(NDVIstack)
-
-# ext
-SWIcrop <- crop(SWIstack, ext)
-plot(SWIcrop)
 
 
 
