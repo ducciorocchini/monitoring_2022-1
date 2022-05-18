@@ -2,15 +2,14 @@
 
 setwd("C:/lab/play/refmonitoring/fcover_00-12")
 
-library(ncdf4) # for formatting our files - to manage spatial data from Copernicus, read and manipulate them (in nc)
-library(raster) # work with raster file (single layer data)
-library(ggplot2) # for plots - to ggplot raster layers - create graphics
+library(ncdf4) # to read and manage nc files from Copernicus
+library(raster) # to manage raster file (single layer files)
+library(ggplot2) # for ggplots
 library(viridis) # colorblind friendly palettes 
-library(patchwork) # for comparing separate ggplots, building a multiframe 
-library(gridExtra) # for grid.arrange plotting, creating a multiframe  
-library(rgdal) # to open shape file 
-library(RColorBrewer)
-library(RStoolbox)
+library(patchwork) # to build a multiframe 
+library(gridExtra) # to create multiframe ggplot
+library(RColorBrewer) # to use brewer paleettes
+library(RStoolbox) # to unsuperclass
 
 rlist <- list.files(pattern = "c_gls_FCOVER_")
 list_rast <- lapply(rlist, raster)
@@ -51,7 +50,7 @@ g4 <- ggplot() + geom_raster(FCOVER2018_df, mapping = aes(x=x, y=y, fill=FCOVER.
 g5 <- ggplot() + geom_raster(FCOVER2020_df, mapping = aes(x=x, y=y, fill=FCOVER.5)) + scale_fill_viridis(option = "magma") + ggtitle("Percentage of forest in 2020") + labs(fill = "FCOVER")
 
 grid.arrange(g1, g2, g3, g4, g5, nrow=3)
-#or through patchwork package g2 + g1 + g3 / g4 
+# or through patchwork package g2 + g1 + g3 / g4 
 
 # export
 png("outputs/fcover_ggplot.png", res=300, width = 3000, height= 3000)
