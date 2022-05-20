@@ -1,7 +1,8 @@
-### exam project on monitoring the reforestation projects in brazil
+### exam project on monitoring the reforestation projects of the Brazilian atlantic forest
 
 setwd("C:/lab/play/refmonitoring/fcover_00-12")
 
+# let's recall the the packages needed
 library(ncdf4) # to read and manage nc files from Copernicus
 library(raster) # to manage raster file (single layer files)
 library(ggplot2) # for ggplots
@@ -11,17 +12,20 @@ library(gridExtra) # to create multiframe ggplot
 library(RColorBrewer) # to use brewer paleettes
 library(RStoolbox) # to unsuperclass
 
+# create a list of the FCOVER files to apply raster function to the list and import all the files in one shot
 rlist <- list.files(pattern = "c_gls_FCOVER_")
 list_rast <- lapply(rlist, raster)
 
+# create a stack of the raster objects
 FCOVERstack <- stack(list_rast)
 # plot(FCOVERstack)
 
-#let's crop on brazil atlantic forest
-ext <- c(-52, -32, -20, -4)
+# now let's crop on the brazilian atlantic forest
+ext <- c(-47, -32, -27, -4)
 FCOVERcrop <- crop(FCOVERstack, ext)
 plot(FCOVERcrop)
 
+# assign a name to each file of the stack 
 names(FCOVERcrop) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5")
 
 #export
@@ -29,14 +33,14 @@ png("outputs/fcover_plot.png", res = 300, width = 3000, height = 3000)
 plot(FCOVERcrop)
 dev.off()
 
-
+# assign each file of the stack to an object to manage them more easily
 FCOVER2012 <- FCOVERcrop$FCOVER.1
 FCOVER2014 <- FCOVERcrop$FCOVER.2
 FCOVER2016 <- FCOVERcrop$FCOVER.3
 FCOVER2018 <- FCOVERcrop$FCOVER.4
 FCOVER2020 <- FCOVERcrop$FCOVER.5
 
-
+# let's convert in dataframes to create the ggplot
 FCOVER2012_df <- as.data.frame(FCOVER2012, xy=TRUE)
 FCOVER2014_df <- as.data.frame(FCOVER2014, xy=TRUE)
 FCOVER2016_df <- as.data.frame(FCOVER2016, xy=TRUE)
@@ -62,7 +66,7 @@ dev.off()
 clg <- brewer.pal(n=9, name="YlGn") # with n being the n of colors in the palette and mame the name of the palette
 plot(FCOVERcrop, col = clg)
 
-# plot FCOVER for each year
+# let's create a nice multiframe graph to plot FCOVER for each year 
 par(mfrow = c(2,3))
 plot(FCOVER2012, main = "Forest cover in 2012", col = clg)
 plot(FCOVER2014, main = "Forest cover in 2014", col = clg)
@@ -298,13 +302,13 @@ plot(NDVIdif, col=cld)
 
 
 par(mfrow=c(3, 3))
-plot(FCOVER2014, main = "Forest cover in 2014", col = clg)
+plot(FCOVER2000, main = "Forest cover in 2000", col = clg)
 plot(FCOVER2020, main = "Forest cover in 2020", col = clg)
 plot(dif, col=cld, main="difference between fcover of 2012 and 2020")
-plot(LAI_2014, col=ck, main = "Leaf Area Index in 2014")
+plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
 plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
 plot(LAIdif, col=ckj)
-plot(NDVI2014_def, main="NDVI in 2014", col=cln)
+plot(NDVI2000_def, main="NDVI in 2014", col=cln)
 plot(NDVI2020_def, main="NDVI in 2020", col=cln)
 plot(NDVIdif, col=cld)
 
