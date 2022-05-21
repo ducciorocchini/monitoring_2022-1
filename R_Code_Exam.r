@@ -21,8 +21,8 @@ FCOVERstack <- stack(list_rast)
 
 
 # now let's crop on the brazilian atlantic forest
-#ext <- c(-47, -32, -27, -4)
-ext <- c(-79, -44, 12, -16)
+ext <- c(-59, -32, -37, -4)
+# ext <- c(-79, -44, 12, -16)
 FCOVERcrop <- crop(FCOVERstack, ext)
 # assign a name to each file of the stack 
 names(FCOVERcrop) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5", "FCOVER.6", "FCOVER.7", "FCOVER.8", "FCOVER.9", "FCOVER.10", "FCOVER.11")
@@ -54,6 +54,45 @@ plot(FCOVER2000, main= "Forest cover in 2000")
 plot(FCOVER2020, main= "Forest cover in 2020")
 dev.off()
 
+# plot with a scale of green to give the idea of the vegetation cover
+# using RColorBrewer package and the sequential palette YG1n
+clg <- brewer.pal(n=9, name="YlGn") # with n being the n of colors in the palette and mame the name of the palette
+par(mfrow=c(1, 2))
+plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
+plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
+
+# export
+png("outputs/fcover_plot_greenscale.png", res= 300, width=3000, height=3000)
+par(mfrow=c(1, 2))
+plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
+plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
+dev.off()
+
+# difference in FCOVER between 2000 nad 2020
+dif <- FCOVER2000 - FCOVER2020
+cld <- brewer.pal(n=11, name="PiYG")
+dev.off()
+plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
+
+# export
+
+ext2 <- c(-60, -50, -30, -20)
+FCOVERcrop2 <- crop(FCOVERstack, ext2)
+names(FCOVERcrop2) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5", "FCOVER.6", "FCOVER.7", "FCOVER.8", "FCOVER.9", "FCOVER.10", "FCOVER.11")
+# to check the cropped area let's plot just one object to have a more rapid check
+plot(FCOVERcrop2$FCOVER.1)
+FCOVER2000 <- FCOVERcrop2$FCOVER.1
+FCOVER2002 <- FCOVERcrop2$FCOVER.2
+FCOVER2004 <- FCOVERcrop2$FCOVER.3
+FCOVER2006 <- FCOVERcrop2$FCOVER.4
+FCOVER2008 <- FCOVERcrop2$FCOVER.5
+FCOVER2010 <- FCOVERcrop2$FCOVER.6
+FCOVER2012 <- FCOVERcrop2$FCOVER.7
+FCOVER2014 <- FCOVERcrop2$FCOVER.8
+FCOVER2016 <- FCOVERcrop2$FCOVER.9
+FCOVER2018 <- FCOVERcrop2$FCOVER.10
+FCOVER2020 <- FCOVERcrop2$FCOVER.11
+
 # let's make a ggplot. first conver in dataframes
 FC2000_dat <- as.data.frame(FCOVER2000, xy=TRUE)
 FC2020_dat <- as.data.frame(FCOVER2020, xy=TRUE)
@@ -67,20 +106,6 @@ grid.arrange(g1, g2, nrow=1)
 # export
 png("outputs/fcover_ggplot.png", res=300, width = 3000, height= 3000)
 grid.arrange(g1, g2, nrow=1)
-dev.off()
-
-# plot with a scale of green to give the idea of the vegetation cover
-# using RColorBrewer package and the sequential palette YG1n
-clg <- brewer.pal(n=9, name="YlGn") # with n being the n of colors in the palette and mame the name of the palette
-par(mfrow=c(1, 2))
-plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
-plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
-
-# export
-png("outputs/fcover_plot_greenscale.png", res= 300, width=3000, height=3000)
-par(mfrow=c(1, 2))
-plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
-plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
 dev.off()
 
 # compare fcover between 2000 and 2020 with a linear regression model (scatterplot)
@@ -103,16 +128,6 @@ png("outputs/fcover_hist.png", res = 300, width = 3000, height = 3000)
 par(mfrow=c(1,2))
 hist(FCOVER2000, main="Frequency distribution FCOVER data in 2000", xlab = "FCOVER", col = "plum3")
 hist(FCOVER2020, main="Frequency distribution FCOVER data in 2020", xlab = "FCOVER", col = "plum3")
-dev.off()
-
-# difference in FCOVER between 2000 nad 2020
-dif <- FCOVER2000 - FCOVER2020
-cld <- brewer.pal(n=11, name="PiYG")
-plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
-
-# export
-png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
-plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
 dev.off()
 
 
@@ -143,83 +158,83 @@ plot(Fclass2018$map)
 plot(Fclass2020$map)
 
 freq(Fclass2000$map)
-#     value   count
-#[1,]     1 1093753 low
-#[2,]     2 1057614 high
-#[3,]    NA 2176313
+#     value  count
+#[1,]     1 574084
+#[2,]     2 680082 high
+#[3,]    NA    234
 # calculate the total (excluding NA) to calculate the proportion of high cover
-total <- 1093753 + 1057614 
-high_prop_00 <- 1057614/total
+total <- 680082 + 574084 
+high_prop_00 <- 680082/total
 
 freq(Fclass2002$map)
-#     value   count
-#[1,]     1  991782 high
-#[2,]     2 1159585
-#[3,]    NA 2176313
-high_prop_02 <- 991782/total
+#     value  count
+#[1,]     1 694578 high
+#[2,]     2 559588
+#[3,]    NA    234
+high_prop_02 <- 694578/total
 
 freq(Fclass2004$map)
-#     value   count
-#[1,]     1 1047183 high
-#[2,]     2 1104184
-#[3,]    NA 2176313
-high_prop_04 <- 1047183/total
+#     value  count
+#[1,]     1 579737 high
+#[2,]     2 674429
+#[3,]    NA    234
+high_prop_04 <- 579737/total
 
 freq(Fclass2006$map)
-#     value   count
-#[1,]     1  942624
-#[2,]     2 1208743 high
-#[3,]    NA 2176313
-high_prop_06 <- 1208743/total
+#     value  count
+#[1,]     1 694662 high
+#[2,]     2 559504
+#[3,]    NA    234
+high_prop_06 <- 694662/total
 
 freq(Fclass2008$map)
-#     value   count
-#[1,]     1  949937
-#[2,]     2 1201430 high
-#[3,]    NA 2176313
-high_prop_08 <- 1201430/total
+#     value  count
+#[1,]     1 462446
+#[2,]     2 791720 high
+#[3,]    NA    234
+high_prop_08 <- 791720/total
 
 freq(Fclass2010$map)
-#     value   count
-#[1,]     1 1051991
-#[2,]     2 1099376 high
-#[3,]    NA 2176313
-high_prop_10 <- 1099376/total
+#     value  count
+#[1,]     1 470959
+#[2,]     2 783207 high
+#[3,]    NA    234
+high_prop_10 <- 783207/total
 
 freq(Fclass2012$map)
-#     value   count
-#[1,]     1 1058698
-#[2,]     2 1092669 high
-#[3,]    NA 2176313
-high_prop_12 <- 1092669/total
+#     value  count
+#[1,]     1 592043
+#[2,]     2 662123 high
+#[3,]    NA    234
+high_prop_12 <- 662123/total
 
 freq(Fclass2014$map)
-#    value   count
-#[1,]     1 1144275 
-#[2,]     2 1007092 high
-#[3,]    NA 2176313
-high_prop_14 <- 1007092/total
+#     value  count
+#[1,]     1 568677
+#[2,]     2 685489 high
+#[3,]    NA    234
+high_prop_14 <- 685489/total
 
 freq(Fclass2016$map)
-#    value   count
-#[1,]     1  934769 high
-#[2,]     2 1216598
-#[3,]    NA 2176313
-high_prop_16 <- 934769/total
+#    value  count
+#[1,]     1 483291
+#[2,]     2 770875 high
+#[3,]    NA    234
+high_prop_16 <- 770875/total
 
 freq(Fclass2018$map)
-#    value   count
-#[1,]     1 1233475 high
-#[2,]     2  917892 
-#[3,]    NA 2176313
-high_prop_18 <- 1233475/total
+#     value  count
+#[1,]     1 454759
+#[2,]     2 799407 high
+#[3,]    NA    234
+high_prop_18 <- 799407/total
 
 freq(Fclass2020$map)
-#    value   count
-#[1,]     1  853032 
-#[2,]     2 1298335 high
-#[3,]    NA 2176313
-high_prop_20 <- 1298335/total
+#     value  count
+#[1,]     1 704609 high
+#[2,]     2 549557
+#[3,]    NA    234
+high_prop_20 <- 704609/total
 
 high_prop <- c(high_prop_00, high_prop_02, high_prop_04, high_prop_06, high_prop_08, high_prop_10, high_prop_12, high_prop_14, high_prop_16, high_prop_18, high_prop_20)
 year <- c(2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020)
@@ -228,14 +243,14 @@ model <- lm(year~high_prop)
 plot(high_prop ~ year)
 cor.test(high_prop, year)
 # no correlation
-
+# prediction
 
 ###### Leaf Area Index
 LAIlist <- list.files(pattern = "c_gls_LAI")
 LAIrast <- lapply(LAIlist, raster)
 LAIstack <- stack(LAIrast)
 
-LAIcrop <- crop(LAIstack, ext)
+LAIcrop <- crop(LAIstack, ext2)
 ck <- brewer.pal(n=9, name="GnBu")
 plot(LAIcrop, col=ck)
 
