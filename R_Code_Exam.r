@@ -123,20 +123,29 @@ dev.off()
 plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
 
 # export
+png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
+plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
+dev.off()
 
-###### Leaf Area Index
+
+
+
+################# Leaf Area Index ###################
 LAIlist <- list.files(pattern = "c_gls_LAI")
 LAIrast <- lapply(LAIlist, raster)
 LAIstack <- stack(LAIrast)
 
 LAIcrop <- crop(LAIstack, ext)
-ck <- brewer.pal(n=9, name="GnBu")
-plot(LAIcrop, col=ck)
-
 names(LAIcrop) <- c("LAI.1", "LAI.2")
 LAI_2000 <- LAIcrop$LAI.1
 LAI_2020 <- LAIcrop$LAI.2
 
+ck <- brewer.pal(n=9, name="GnBu")
+par(mfrow=c(1, 2))
+plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
+plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
+
+# export
 png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
 par(mfrow=c(1, 2))
 plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
@@ -159,7 +168,7 @@ dev.off()
 
 LAIdif <- LAI_2000 - LAI_2020
 ckj <- brewer.pal(n=11, name="RdYlBu")
-plot(LAIdif, col=ckj)
+plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=ckj)
     
 # export
 png("outputs/LAI_dif.png", res = 300, width = 3000, height = 3000)
@@ -374,7 +383,7 @@ abline(2046.33, -80.31)
 
 
 
- FCOVERcrop2 <- lapply(list_rast, crop, ext2)
+FCOVERcrop2 <- lapply(list_rast, crop, ext2)
 FCOVERcrop2
 
 fcover_class <- lapply(FCOVERcrop2, unsuperClass, nClasses = 2)
