@@ -8,9 +8,6 @@ library(ncdf4) # to read and manage nc files from Copernicus
 library(raster) # to manage raster file (single layer files)
 library(ggplot2) # for ggplots
 library(viridis) # colorblind friendly palettes 
-# we can use viridis package:
-# Use the color scales in this package to make plots that are pretty, better represent your data, easier to read by those with colorblindness, and print well in gray scale.
-# paper on virtuale that states which palette are better to avoid because unseen by people with color blindness
 # in the paper is mentioned the viridis palette: exactly the palette in we use R. it is very similar, despite the color vision deseases; the scale is mantained
 # thanks to this palette even people with disease will not see the esact colors but will at least discriminate between minimukm and maximum
 # also cividis is a good inclusive palette
@@ -66,7 +63,7 @@ par(mfrow=c(1, 2))
 plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
 plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
 # export
-png("outputs/plot_fcover_2000_2020_greenscale.png", res= 300, width=3000, height=3000)
+png("outputs/plot_fcover_2000_2020_greenscale.png", res= 300, width=3000, height=2000)
 par(mfrow=c(1, 2))
 plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
 plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
@@ -76,88 +73,69 @@ dev.off()
 FC2000_dat <- as.data.frame(FCOVER2000, xy = TRUE)
 FC2020_dat <- as.data.frame(FCOVER2020, xy = TRUE)
 
-g1 <- ggplot() + geom_raster(FC2000_dat, mapping = aes(x=x, y=y, fill=FCOVER.00)) + scale_fill_viridis(option = "magma") + ggtitle("Forest cover in 2000") + labs(fill = "FCOVER")
-g2 <- ggplot() + geom_raster(FC2020_dat, mapping = aes(x=x, y=y, fill=FCOVER.20)) + scale_fill_viridis(option = "magma") + ggtitle("Forest cover in 2020") + labs(fill = "FCOVER")
-
+g1 <- ggplot() + geom_raster(FC2000_dat, mapping = aes(x=x, y=y, fill=FCOVER.00)) + scale_fill_viridis(option = "turbo") + ggtitle("Forest cover in 2000") + labs(fill = "FCOVER")
+g2 <- ggplot() + geom_raster(FC2020_dat, mapping = aes(x=x, y=y, fill=FCOVER.20)) + scale_fill_viridis(option = "turbo") + ggtitle("Forest cover in 2020") + labs(fill = "FCOVER")
+# viridis: color scales in this package allows to make plots that are pretty, better represent your data, easier to read by those with colorblindness, and print well in gray scale.
+# thanks to these palettes even people with disease will not see the exact colors but will at least discriminate between minimukm and maximum
+# so very inclusive palettes!!!
 grid.arrange(g1, g2, nrow=1)
 # or through patchwork package g1 + g2
 
-#ggplot() + geom_raster(FCOVER2000, mapping = aes(x=x, y=y, fill = FCOVER.00))
-#ggplot() + geom_raster(FCOVER2000, mapping = aes(x=x, y=y, fill = FCOVER.00)) + scale_fill_viridis()
-#ggplot() + geom_raster(FCOVER2000, mapping = aes(x=x, y=y, fill = FCOVER.00)) + scale_fill_viridis(option = "cividis")
-#ggplot() + geom_raster(FC2000_dat, mapping = aes(x=x, y=y, fill = FCOVER.00)) + scale_fill_viridis(option = "cividis") # more focused!! u have to discover why
- #########################################################################
-
-
 # export
-png("outputs/fcover_ggplot.png", res=300, width = 3000, height= 3000)
+png("outputs/fcover_ggplot.png", res=300, width = 4000, height= 3000)
 grid.arrange(g1, g2, nrow=1)
 dev.off()
 
-# compare fcover between 2000 and 2020 with a linear regression model (scatterplot)
-plot(FCOVER2000, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020")
-abline(0,1, col="red")
-
-# export
-png("outputs/fcover_regressionmod.png", res = 300, width = 3000, height = 3000)
-plot(FCOVER2000, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020")
-abline(0,1, col="red")
-dev.off()
-
-# plot frequency distribution data with histograms
-par(mfrow=c(1,2))
-hist(FCOVER2000, main="Frequency distribution FCOVER data in 2000", xlab = "FCOVER", col = "plum3")
-hist(FCOVER2020, main="Frequency distribution FCOVER data in 2020", xlab = "FCOVER", col = "plum3")
-
-#export
-png("outputs/fcover_hist.png", res = 300, width = 3000, height = 3000)
-par(mfrow=c(1,2))
-hist(FCOVER2000, main="Frequency distribution FCOVER data in 2000", xlab = "FCOVER", col = "plum3")
-hist(FCOVER2020, main="Frequency distribution FCOVER data in 2020", xlab = "FCOVER", col = "plum3")
-dev.off()
 
 # difference in FCOVER between 2000 nad 2020
 dif <- FCOVER2000 - FCOVER2020
-cld <- brewer.pal(n=11, name="PiYG")
+cld <- brewer.pal(n=11, name="BrBG")
 dev.off()
-plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
+plot(dif, col =  cld, main="Forest Cover differences between 2000 and 2020")
 
 # export
 png("outputs/fcover_dif.png", res = 300, width = 3000, height = 3000)
-plot(dif, col=cld, main="difference between fcover in 2000 and 2020")
+plot(dif, col=cld, main="Forest Cover differences between 2000 and 2020")
 dev.off()
 
 
 
 
 ################# Leaf Area Index ###################
-LAIlist <- list.files(pattern = "c_gls_LAI")
-LAIrast <- lapply(LAIlist, raster)
-LAIstack <- stack(LAIrast)
+LAI_list <- list.files(pattern = "c_gls_LAI")
+LAI_list
+LAI_rast <- lapply(LAI_list, raster)
+LAI_rast
+LAI_stack <- stack(LAI_rast)
+LAI_stack
 
-LAIcrop <- crop(LAIstack, ext)
+# let's crop again on the area of interest
+LAIcrop <- crop(LAI_stack, ext)
+#assigning names to the layers
 names(LAIcrop) <- c("LAI.1", "LAI.2")
+# assign each layer to an object to make them more manageble
 LAI_2000 <- LAIcrop$LAI.1
 LAI_2020 <- LAIcrop$LAI.2
 
-ck <- brewer.pal(n=9, name="GnBu")
+
+ck <- brewer.pal(n=9, name="GnBu") # create a palette to plot LAI
 par(mfrow=c(1, 2))
 plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
 plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
 
 # export
-png("outputs/LAI_plot.png", res=300, width=3000, height=3000)
+png("outputs/LAI_plot.png", res=300, width=3000, height=2000)
 par(mfrow=c(1, 2))
 plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
 plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
 dev.off()
 
-
+# let's make a ggplot
 LAI_2000_df <- as.data.frame(LAI_2000, xy=TRUE)
 LAI_2020_df <- as.data.frame(LAI_2020, xy=TRUE)
 
-LAIg1 <- ggplot() + geom_raster(LAI_2000_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
-LAIg2 <- ggplot() + geom_raster(LAI_2020_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="plasma") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
+LAIg1 <- ggplot() + geom_raster(LAI_2000_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="mako") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
+LAIg2 <- ggplot() + geom_raster(LAI_2020_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="mako") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
 
 LAIg1 + LAIg2 
 
@@ -166,17 +144,22 @@ png("outputs/LAI_ggplot.png", res=250, width=6000, height=3000)
 LAIg1 + LAIg2
 dev.off()
 
+# difference in LAI between 2000 and 2020
 LAIdif <- LAI_2000 - LAI_2020
 ckj <- brewer.pal(n=11, name="RdYlBu")
+dev.off()
 plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=ckj)
-    
+
+
 # export
 png("outputs/LAI_dif.png", res = 300, width = 3000, height = 3000)
 plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=ckj)
 dev.off()
 
+# let's use this function that return a plot matrix, consisting of scatter plots corresponding to each data frame
 pairs(LAIcrop)
 
+# export
 png("outputs/LAI_pairs.png", res=300, width=3000, height=3000)
 pairs(LAIcrop)
 dev.off()
@@ -184,23 +167,28 @@ dev.off()
 
 
 
-######### NDVI
-NDVIlist <- list.files(pattern="NDVI")
-NDVIrast <- lapply(NDVIlist, raster)
-NDVIstack <- stack(NDVIrast)
+#################### NDVI #############################
+NDVI_list <- list.files(pattern="NDVI")
+NDVI_list
+NDVI_rast <- lapply(NDVI_list, raster)
+NDVI_rast
+NDVI_stack <- stack(NDVI_rast)
+NDVI_stack
 
-# plot(NDVIstack)
-
-# ext
-NDVIcrop <- crop(NDVIstack, ext)
+# crop on the area of interest
+NDVIcrop <- crop(NDVI_stack, ext)
 plot(NDVIcrop)
 
-# plotRGB(NDVIcrop, r=1, g=2, b=4, stretch="Lin")
+plotRGB(NDVIcrop, r=1, g=2, b=3, stretch="Lin")
+plotRGB(NDVIcrop, r=2, g=1, b=3, stretch="Lin")
+plotRGB(NDVIcrop, r=2, g=2, b=1, stretch="Lin")
+png("outputs/NDVI_RGB.png", res=300, width=3000, height=3000)
 
-names(NDVIcrop) <- c("NDVI.1", "NDVI.2")
+
+names(NDVIcrop) <- c("NDVI.1", "NDVI.2", "NDVI.3")
 NDVI2000 <- NDVIcrop$NDVI.1
-NDVI2020 <- NDVIcrop$NDVI.2
-#NDVI2020 <- NDVIcrop$NDVI.3
+NDVI2010 <- NDVIcrop$NDVI.2
+NDVI2020 <- NDVIcrop$NDVI.3
 
 #click(NDVI2014)
 NDVI2000_def <- calc(NDVI2000, fun=function(x){x[x>0.935] <- NA;return(x)})
@@ -385,6 +373,30 @@ abline(2046.33, -80.31)
 
 FCOVERcrop2 <- lapply(list_rast, crop, ext2)
 FCOVERcrop2
+
+
+
+# compare fcover between 2000 and 2020 with a linear regression model (scatterplot)
+plot(FC2000_crop2, FC2020_crop2, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020")
+abline(0,1, col="red")
+
+# export
+png("outputs/fcover_regressionmod.png", res = 300, width = 3000, height = 3000)
+plot(FCOVER2000, FCOVER2020, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020")
+abline(0,1, col="red")
+dev.off()
+
+# plot frequency distribution data with histograms
+par(mfrow=c(1,2))
+hist(FCOVER2000, main="Frequency distribution FCOVER data in 2000", xlab = "FCOVER", col = "plum3")
+hist(FCOVER2020, main="Frequency distribution FCOVER data in 2020", xlab = "FCOVER", col = "plum3")
+
+#export
+png("outputs/fcover_hist.png", res = 300, width = 3000, height = 3000)
+par(mfrow=c(1,2))
+hist(FCOVER2000, main="Frequency distribution FCOVER data in 2000", xlab = "FCOVER", col = "plum3")
+hist(FCOVER2020, main="Frequency distribution FCOVER data in 2020", xlab = "FCOVER", col = "plum3")
+dev.off()
 
 fcover_class <- lapply(FCOVERcrop2, unsuperClass, nClasses = 2)
 plot(fcover_class[[1]]$map)
