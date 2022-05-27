@@ -6,11 +6,9 @@ setwd("C:/lab/exam")
 # let's recall the the packages needed
 library(ncdf4) # to read and manage nc files from Copernicus
 library(raster) # to manage raster file (single layer files)
-library(ggplot2) # for ggplots
+library(ggplot2) # plotting package to better represent data with graphs 
 library(viridis) # colorblind friendly palettes 
-# in the paper is mentioned the viridis palette: exactly the palette in we use R. it is very similar, despite the color vision deseases; the scale is mantained
-# thanks to this palette even people with disease will not see the esact colors but will at least discriminate between minimukm and maximum
-# also cividis is a good inclusive palette
+# thanks to this palette even people with color vision disease will not see the esact colors but will at least discriminate between minimukm and maximum. The scale is mantained
 library(patchwork) # to build a multiframe 
 library(gridExtra) # to create multiframe ggplot
 library(RColorBrewer) # to use brewer palettes
@@ -227,6 +225,7 @@ png("outputs/NDVI_dif.png", res=300, width=3000, height=3000)
 plot(NDVIdif, col=cld)
 dev.off()
 
+
 # now let's plot together all the variables, FCOVER, LAI, and NDVI, in 2000, 2020 and the differences
 par(mfrow=c(3, 3))
 plot(FCOVER2000, main = "Forest cover in 2000", col = clg)
@@ -254,6 +253,7 @@ plot(NDVIdif, col=cld, main= "Difference between NDVI in 2000 and 2020")
 dev.off()
 
 
+
 ######################## analysis of the main deforested area ############################
 # from these comparison, mainly from LAI and FCOVER, we can understand which is the most deforested area
 # let's crop on that by applying crop function and the new extent to fcover_rast, the list of the 11 imported FCOVER images
@@ -265,6 +265,7 @@ names(FCOVERcrop2) <- c("FCOVER.1","FCOVER.2","FCOVER.3","FCOVER.4", "FCOVER.5",
 FC2000_crop2 <- FCOVERcrop2$FCOVER.1
 FC2020_crop2 <- FCOVERcrop2$FCOVER.11
 
+# compare fcover of the main deforested area between 2000 and 2020
 par(mfrow=c(1,2))
 plot(FC2000_crop2, main="FCOVER 2000")
 plot(FC2020_crop2, main="FCOVER, 2020")
@@ -287,6 +288,7 @@ plot(FC2000_crop2, FC2020_crop2, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2
 abline(0,1, col="red")
 dev.off()
 
+# analyze the frequency distribution of fcover values with histograms
 par(mfrow=c(1,2))
 hist(FC2000_crop2,  main="Frequency distribution FCOVER data in 2000", ylim= c(0, 80000), xlab = "FCOVER 2000", col = "plum3")
 hist(FC2020_crop2,  main="Frequency distribution FCOVER data in 2020", ylim= c(0, 80000), xlab = "FCOVER 2020", col = "plum3")
@@ -317,7 +319,7 @@ total <- sum(y[1:2,2]) # calculate the total n of pixel of each layer
 proportions <- y[, 2]/total*100 # divide each frequency for the total (*100 to get the %)
 high_cover_perc <- proportions[-c(2, 3, 5, 7, 9, 11, 14, 16, 17, 20, 21)] # remove from the vector the frequencies of the low cover values
 year <- c(2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020) # create the year vector
-dat <- data.frame(year, high_cover_perc) # create a dataframe with 2 col, year and proportions
+dat <- data.frame(year, high_cover_perc) # create a dataframe with 2 col, year and the corresponding % of high cover values
 dat
 #   year high_cover_perc
 #1  2000        54.92467
@@ -332,7 +334,8 @@ dat
 #10 2018        37.16119
 #11 2020        37.07771
 
-p1 <- ggplot(dat, aes(x=year, y=high_cover_perc)) + 
+# let's represent the frequency distribution of high cover values (%)
+p1 <- ggplot(dat, aes(x=year, y=high_cover_perc)) 
   geom_bar(stat="identity", fill = "blue") +
 labs( title= "Frequency distribution of high cover values (%)", x="year", y = "% of high cover values")
 p1
@@ -345,16 +348,16 @@ labs( title= "Frequency distribution of high cover values (%)", x="year", y = "%
 p1
 dev.off()
 
-# let's plot the 2 variables to see if there is a correlation
+# let's plot the 2 variables to see if there is a correlation (quantitative vs quantitative variable -> scatterplot)
 plot(high_cover_perc ~ year,
      main = "Correlation between year and % of high cover values" ,
      xlab = "year",
      ylab = "% of high cover valeus")
 # it seems there is correlation: the % of high cover values decreases in time.
-cor.test(high_cover_perc, year) # correlation test. p value lower then the treshold so no refuse alternative hypotesis (so there could be correlation=
+cor.test(high_cover_perc, year) # correlation test. p value lower then the treshold so no refuse alternative hypotesis (so there could be correlation)
 # indeed cor value is -0.86 -> negative correlation, the 86% of the y variance is explained by x
-# let's do a linear regression model to describe the correlation between % of high cover values and time
-model <- lm(high_cover_perc ~ year, data = dat) # create a linear model to describe the correlation between time and percentages
+# let's do a linear regression model to describe the correlation 
+model <- lm(high_cover_perc ~ year, data = dat) 
 model # find intercept and slope values to plot the line
 abline(2218.034, -1.079, col="red")
 summary_stats <- summary(model)
