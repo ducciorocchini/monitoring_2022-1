@@ -389,6 +389,7 @@ lm_ggplot
 dev.off()
 
 
+
 ############## prediction ##################
 
 v <- c(2022, 2024, 2026, 2028, 2030, 2032, 2034, 2036, 2038, 2040, 2042) # create a vector containing the future years for which i want to predict high cover values
