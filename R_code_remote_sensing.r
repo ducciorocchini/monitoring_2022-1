@@ -31,7 +31,6 @@ l2011
 
 # now let's plot it to see the satellite image
 plot(l2011)
-
 # Each band have a range of nm of light that correspond to the wavelenght of the light they're measuring
 # The first 3 bends are the visible part of the satellite images
 # B1 is the reflectance in the blue band
