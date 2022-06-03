@@ -87,7 +87,6 @@ png("outputs/fcover_ggplot.png", res=300, width = 6000, height= 3000)
 grid.arrange(g1, g2, nrow=1)
 dev.off()
 
-
 # difference in FCOVER between 2000 nad 2020
 dif <- FCOVER2000 - FCOVER2020 # in this way we obtain a file where the positive values are those in which FCOVER was higher in 2000, while negatives higher in 2020
 cld <- brewer.pal(n=11, name="BrBG")
@@ -119,7 +118,6 @@ names(LAIcrop) <- c("LAI.1", "LAI.2")
 # assign each layer to an object to make them more manageble
 LAI_2000 <- LAIcrop$LAI.1
 LAI_2020 <- LAIcrop$LAI.2
-
 
 ck <- brewer.pal(n=9, name="GnBu") # create a palette to plot LAI
 par(mfrow=c(1, 2))
@@ -224,7 +222,6 @@ plot(NDVIdif, col=cld, main= "Difference between NDVI in 2000 and 2020")
 png("outputs/NDVI_dif.png", res=300, width=3000, height=3000)
 plot(NDVIdif, col=cld)
 dev.off()
-
 
 # now let's plot together all the variables, FCOVER, LAI, and NDVI, in 2000, 2020 and the differences
 par(mfrow=c(3, 3))
@@ -335,7 +332,7 @@ dat
 #11 2020        37.07771
 
 # let's represent the frequency distribution of high cover values (%)
-p1 <- ggplot(dat, aes(x=year, y=high_cover_perc)) 
+p1 <- ggplot(dat, aes(x=year, y=high_cover_perc, color=year)) 
   geom_bar(stat="identity", fill = "blue") +
 labs( title= "Frequency distribution of high cover values (%)", x="year", y = "% of high cover values")
 p1
