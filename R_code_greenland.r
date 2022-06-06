@@ -113,4 +113,4 @@ pairs(tgr)
 # let's cocompare lst200 with lst20015 there is a kind of head of datas, that are the lower temperature that in 2015 are higher than in 2000, they are above the abline
 # especially u can see the anomaly in the histogram of 2015
 # it means there is a rise especially in the lowest temperature that are those guaranteing the ice to be there otherwise there is ice melt, that is what we are experiencing in fact
-# it is the same we have said by observing the graphs
+# it is the same we have said by observing the graph
