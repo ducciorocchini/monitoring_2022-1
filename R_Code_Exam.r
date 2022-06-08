@@ -1,4 +1,4 @@
-### exam project on monitoring the reforestation projects of the Brazilian atlantic forest
+### exam project on monitoring the Brazilian atlantic forest, or Mata Atlantica
 
 # set the working directories
 setwd("C:/lab/exam")
@@ -59,7 +59,7 @@ dev.off()
 
 # plot with a scale of green to give the idea of the vegetation cover
 # using RColorBrewer package and the sequential palette YG1n
-clg <- brewer.pal(n=9, name="YlGn") # with n being the n of colors in the palette and mame the name of the palette
+clg <- brewer.pal(n=9, name="YlGn") # with n being the n of colors in the palette and name the name of the palette
 par(mfrow=c(1, 2))
 plot(FCOVER2000, main= "Forest cover in 2000", col = clg)
 plot(FCOVER2020, main= "Forest cover in 2020", col = clg)
@@ -74,8 +74,8 @@ dev.off()
 FC2000_dat <- as.data.frame(FCOVER2000, xy = TRUE)
 FC2020_dat <- as.data.frame(FCOVER2020, xy = TRUE)
 
-g1 <- ggplot() + geom_raster(FC2000_dat, mapping = aes(x=x, y=y, fill=FCOVER.00)) + scale_fill_viridis(option = "turbo") + ggtitle("Forest cover in 2000") + labs(fill = "FCOVER")
-g2 <- ggplot() + geom_raster(FC2020_dat, mapping = aes(x=x, y=y, fill=FCOVER.20)) + scale_fill_viridis(option = "turbo") + ggtitle("Forest cover in 2020") + labs(fill = "FCOVER")
+g1 <- ggplot() + geom_raster(FC2000_dat, mapping = aes(x=x, y=y, fill=FCOVER.00)) + scale_fill_viridis() + ggtitle("Forest cover in 2000") + labs(fill = "FCOVER")
+g2 <- ggplot() + geom_raster(FC2020_dat, mapping = aes(x=x, y=y, fill=FCOVER.20)) + scale_fill_viridis() + ggtitle("Forest cover in 2020") + labs(fill = "FCOVER")
 # viridis: color scales in this package allows to make plots that are pretty, better represent your data, easier to read by those with colorblindness, and print well in gray scale.
 # thanks to these palettes even people with disease will not see the exact colors but will at least discriminate between minimukm and maximum; 
 # the default one is viridis, but there are others options all very inclusive palettes!!!
@@ -147,17 +147,18 @@ dev.off()
 
 # difference in LAI between 2000 and 2020
 LAIdif <- LAI_2000 - LAI_2020 # we obtain the LAIdif layer in which positive values are those in which LAI was higher in 2000 and viceversa
-ckj <- brewer.pal(n=11, name="RdYlBu")
 dev.off()
-plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=ckj)
+plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=cld)
 
 # export
 png("outputs/LAI_dif.png", res = 300, width = 3000, height = 3000)
-plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=ckj)
+plot(LAIdif, main= "Differences in Leaf Area Index between 2000 and 2020", col=cld)
 dev.off()
 
 # let's use this function that return a plot matrix, consisting of scatter plots corresponding to each data frame
 pairs(LAIcrop)
+
+plot(LAI_2000, LAI_2020)
 
 # export
 png("outputs/LAI_pairs.png", res=300, width=3000, height=3000)
@@ -183,10 +184,11 @@ plot(NDVIcrop)
 # RGB plot to plot NDVI of different years in the different RGB channels
 # in this way where there are higher values the image takes the red, green or blue color, according to the year assigned to each channel
 # in this way we can understand when and where there's been the higher values.
-plotRGB(NDVIcrop, r=1, g=3, b=2, stretch="Lin") # red: 2000, blue: 2010, green: 2020
+ggRGB(NDVIcrop, r=1, g=3, b=2, stretch="Lin") 
+# red: 2000, blue: 2010, green: 2020
 
 png("outputs/NDVI_RGB.png", res=300, width=3000, height=3000)
-plotRGB(NDVIcrop, r=1, g=3, b=2, stretch="Lin") # red: 2000, blue: 2010, green: 2020
+ggRGB(NDVIcrop, r=1, g=3, b=2, stretch="Lin") # red: 2000, blue: 2010, green: 2020
 dev.off()
 
 # assign names to the layers, and them assign them to objects
@@ -199,6 +201,7 @@ click(NDVI2000) # there are background values when plotting NDVI so let's use cl
 # then transform them into NA
 NDVI2000_def <- calc(NDVI2000, fun=function(x){x[x>0.935] <- NA;return(x)})
 NDVI2020_def <- calc(NDVI2020, fun=function(x){x[x>0.935] <- NA;return(x)})
+# calc function Calculate values for a new Raster* object from another Raster* object, using a formula.
 
 # now we can plot NDVI without background value
 cln <- brewer.pal(n=11, name="RdYlGn") # palette to plot NDVI
@@ -220,7 +223,7 @@ plot(NDVIdif, col=cld, main= "Difference between NDVI in 2000 and 2020")
 
 # export
 png("outputs/NDVI_dif.png", res=300, width=3000, height=3000)
-plot(NDVIdif, col=cld)
+plot(NDVIdif, col=cld, main= "Difference between NDVI in 2000 and 2020")
 dev.off()
 
 # now let's plot together all the variables, FCOVER, LAI, and NDVI, in 2000, 2020 and the differences
@@ -230,7 +233,7 @@ plot(FCOVER2020, main = "Forest cover in 2020", col = clg)
 plot(dif, col=cld, main="difference between fcover of 2012 and 2020")
 plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
 plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
-plot(LAIdif, col=ckj,  main = "Difference between LAI in 2000 and 2020")
+plot(LAIdif, col=cld,  main = "Difference between LAI in 2000 and 2020")
 plot(NDVI2000_def, main="NDVI in 2014", col=cln)
 plot(NDVI2020_def, main="NDVI in 2020", col=cln)
 plot(NDVIdif, col=cld, main= "Difference between NDVI in 2000 and 2020")
@@ -243,7 +246,7 @@ plot(FCOVER2020, main = "Forest cover in 2020", col = clg)
 plot(dif, col=cld, main="Difference between fcover of 2012 and 2020")
 plot(LAI_2000, col=ck, main = "Leaf Area Index in 2000")
 plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
-plot(LAIdif, col=ckj, main = "Difference between LAI in 2000 and 2020")
+plot(LAIdif, col=cld, main = "Difference between LAI in 2000 and 2020")
 plot(NDVI2000_def, main="NDVI in 2014", col=cln)
 plot(NDVI2020_def, main="NDVI in 2020", col=cln)
 plot(NDVIdif, col=cld, main= "Difference between NDVI in 2000 and 2020")
@@ -281,7 +284,7 @@ abline(0,1, col="red")
 
 # export
 png("outputs/fcover_regressionmod.png", res = 300, width = 3000, height = 3000)
-plot(FC2000_crop2, FC2020_crop2, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020")
+plot(FC2000_crop2, FC2020_crop2, xlim = c(0,1), ylim = c(0, 1), xlab = "FCOVER 2000", ylab="FCOVER 2020", main = "scatterplot fcover 2000-2020 crop2")
 abline(0,1, col="red")
 dev.off()
 
@@ -305,6 +308,11 @@ fcover_class <- lapply(FCOVERcrop2, unsuperClass, nClasses = 2)
 dev.off()
 plot(fcover_class[[1]]$map) #let's plot one map to check the classes
 
+png("outputs/fcover_classes.png", res=300, width=3000, height=3000)
+plot(fcover_class[[1]]$map)
+dev.off()
+
+
 # now let's calculate the frequencies of the 2 values for each layer (year)
 y <- NULL # create an empty vector in which storing output values
 for(i in 1:11) {
@@ -314,11 +322,28 @@ for(i in 1:11) {
 
 total <- sum(y[1:2,2]) # calculate the total n of pixel of each layer
 proportions <- y[, 2]/total*100 # divide each frequency for the total (*100 to get the %)
+proportions
+# in 2000 55% of high cover and 45 of low cover
+# in 2020 37% of high cover and 63% of low cover
+cover <- c("high", "low")
+prop2000 <- c(55, 45)
+proportion2000 <- data.frame(cover, prop2000)
+c1 <- ggplot(proportion2000, aes(x=cover, y=prop2000, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,100) + labs(title="cover proportions in 2000", y = "%")
+prop2020 <- c(37, 63)
+proportion2020 <- data.frame(cover, prop2020)
+c2 <- ggplot(proportion2020, aes(x=cover, y=prop2020, color=cover)) + geom_bar(stat="identity", fill="white") + ylim(0,100) + labs(title="cover proportions in 2020", y = "%")
+c1/c2
+
+# export
+png("outputs/proportions.png", res=300, width=2000, height=3000)
+c1/c2
+dev.off()
+
 high_cover_perc <- proportions[-c(2, 3, 5, 7, 9, 11, 14, 16, 17, 20, 21)] # remove from the vector the frequencies of the low cover values
 year <- c(2000, 2002, 2004, 2006, 2008, 2010, 2012, 2014, 2016, 2018, 2020) # create the year vector
 dat <- data.frame(year, high_cover_perc) # create a dataframe with 2 col, year and the corresponding % of high cover values
 dat
-#   year high_cover_perc
+#  year high_cover_perc
 #1  2000        54.92467
 #2  2002        54.71186
 #3  2004        61.22360
@@ -332,10 +357,9 @@ dat
 #11 2020        37.07771
 
 # let's represent the frequency distribution of high cover values (%)
-p1 <- ggplot(dat, aes(x=year, y=high_cover_perc, color=year)) 
-  geom_bar(stat="identity", fill = "blue") +
-labs( title= "Frequency distribution of high cover values (%)", x="year", y = "% of high cover values")
+p1 <- ggplot(dat, aes(x=year, y=high_cover_perc, color=year)) + geom_bar(stat="identity", fill = "blue") + labs( title= "Frequency distribution of high cover values (%)", x="year", y = "% of high cover values")
 p1
+# stat="identity" indicates that R should use the y-value given in the ggplot() function otherwise the default argument is "count", that count the number of observations based on the x-variable groupings
 
 # export
 png("outputs/geom_bar.png", res=300, width=3000, height=3000)
