@@ -132,13 +132,9 @@ plot(LAI_2020, col=ck, main = "Leaf Area Index in 2020")
 dev.off()
 
 # ggplot
-LAI_2000_df <- as.data.frame(LAI_2000, xy=TRUE)
-LAI_2020_df <- as.data.frame(LAI_2020, xy=TRUE)
-
-LAIg1 <- ggplot() + geom_raster(LAI_2000_df, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="mako") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
-LAIg2 <- ggplot() + geom_raster(LAI_2020_df, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="mako") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
-
-LAIg1 + LAIg2 
+LAIg1 <- ggplot() + geom_raster(LAI_2000, mapping = aes(x=x, y=y, fill=LAI.1)) + scale_fill_viridis(option ="mako") + ggtitle("Leaf Area Index in 2000") + labs(fill = "LAI")
+LAIg2 <- ggplot() + geom_raster(LAI_2020, mapping = aes(x=x, y=y, fill=LAI.2)) + scale_fill_viridis(option ="mako") + ggtitle("Leaf Area Index in 2020") + labs(fill = "LAI")
+LAIg1 + LAIg2
 
 #export
 png("outputs/LAI_ggplot.png", res=250, width=6000, height=3000)
@@ -157,8 +153,6 @@ dev.off()
 
 # let's use this function that return a plot matrix, consisting of scatter plots corresponding to each data frame
 pairs(LAIcrop)
-
-plot(LAI_2000, LAI_2020)
 
 # export
 png("outputs/LAI_pairs.png", res=300, width=3000, height=3000)
@@ -197,7 +191,7 @@ NDVI2000 <- NDVIcrop$NDVI.1
 NDVI2010 <- NDVIcrop$NDVI.2
 NDVI2020 <- NDVIcrop$NDVI.3
 
-click(NDVI2000) # there are background values when plotting NDVI so let's use click function and click on them to understand the value
+# click(NDVI2000) # there are background values when plotting NDVI so let's use click function and click on them to understand the value
 # then transform them into NA
 NDVI2000_def <- calc(NDVI2000, fun=function(x){x[x>0.935] <- NA;return(x)})
 NDVI2020_def <- calc(NDVI2020, fun=function(x){x[x>0.935] <- NA;return(x)})
@@ -254,7 +248,7 @@ dev.off()
 
 
 
-######################## analysis of the main deforested area ############################
+######################## Analysis of the main deforested area ############################
 # from these comparison, mainly from LAI and FCOVER, we can understand which is the most deforested area
 # let's crop on that by applying crop function and the new extent to fcover_rast, the list of the 11 imported FCOVER images
 ext2 <- c(-56, -50, -26, -20) # coordinate of the most deforested area
@@ -301,8 +295,6 @@ hist(FC2020_crop2,  main="Frequency distribution FCOVER data in 2020", ylim= c(0
 dev.off()
 
 
-
-############################# linear regression model ###########################
 # now let's apply unsuperClass function to each layer to divide it in 2 possible values, that will represent mainly high and low cover values
 fcover_class <- lapply(FCOVERcrop2, unsuperClass, nClasses = 2)
 dev.off()
@@ -356,6 +348,10 @@ dat
 #10 2018        37.16119
 #11 2020        37.07771
 
+
+
+
+############################# linear regression model ###########################
 # let's represent the frequency distribution of high cover values (%)
 p1 <- ggplot(dat, aes(x=year, y=high_cover_perc, color=year)) + geom_bar(stat="identity", fill = "blue") + labs( title= "Frequency distribution of high cover values (%)", x="year", y = "% of high cover values")
 p1
@@ -408,21 +404,4 @@ lm_ggplot
 png("outputs/model_ggplot.png", res=300, width=3000, height=3000)
 lm_ggplot
 dev.off()
-
-
-
-############## prediction ##################
-
-v <- c(2022, 2024, 2026, 2028, 2030, 2032, 2034, 2036, 2038, 2040, 2042) # create a vector containing the future years for which i want to predict high cover values
-newdat <- as.data.frame(v)
-colnames(newdat) <- "future" 
-prediction <- predict(model, newdata = newdat) 
-dat2 <- cbind(newdat, prediction)
-plot(dat2)
-
-pr <- ggplot(prediction, aes(x = year, y = percentages)) + # plot the linear model, visualize the % variation through time with fitted linear model
-  geom_point() +
-  stat_smooth(method = "lm", col = "red")
-print(pr + labs(title = "Prediction", y = "Forest cover (%)", x = "Year"))
-
 
