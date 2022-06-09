@@ -317,7 +317,7 @@ dev.off()
 plot(high_cover_perc ~ year,
      main = "Correlation between year and % of high cover values" ,
      xlab = "year",
-     ylab = "% of high cover valeus")
+     ylab = "% of high cover values")
 # it seems there is correlation: the % of high cover values decreases in time.
 cor.test(high_cover_perc, year) # correlation test. p value lower then the treshold so no refuse alternative hypotesis (so there could be correlation)
 # indeed cor value is -0.86 -> negative correlation, the 86% of the y variance is explained by x
@@ -331,7 +331,7 @@ png("outputs/model_plot.png", res=300, width=3000, height=3000)
 plot(high_cover_perc ~ year,
      main = "Correlation between year and % of high cover values" ,
      xlab = "year",
-     ylab = "% of high cover valeus")
+     ylab = "% of high cover values")
 abline(2218.034, -1.079, col="red")
 dev.off()
 
